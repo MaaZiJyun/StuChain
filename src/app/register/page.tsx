@@ -77,7 +77,7 @@ const page = () => {
       <form className="w-full max-w-sm p-6 bg-white rounded shadow-md">
         <h1 className="text-4xl text-black font-bold">Sign up</h1>
 
-        <h2 className="text-lg text-black mb-4">to create an account</h2>
+        <h2 className="text-lg text-black mb-8">to create an account</h2>
 
         <div className="mb-4 flex items-center">
           <label className="block text-gray-500 text-sm mr-2">Role:</label>

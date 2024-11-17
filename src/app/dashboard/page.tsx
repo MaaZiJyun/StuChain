@@ -134,50 +134,54 @@ const page = () => {
 
         {/* Team Members */}
         <div className="bg-white shadow-md rounded-lg mb-6 p-4">
-          <h3 className="text-xl font-semibold mb-8">Profile Information</h3>
-          <div className="flex space-x-6 overflow-x-auto">
-            {wallet ? (
-              <div className="flex flex-col space-y-2">
-                <div className="flex space-x-2 items-center">
-                  <label className="font-bold">ID:</label>
-                  <input
-                    type="text"
-                    className="w-full px-2 py-1 border rounded-md text-gray-700"
-                    readOnly
-                    value={wallet.id}
-                  />
-                  <button onClick={() => copyToClipboard(wallet.id)}>
-                    <DocumentDuplicateIcon className="h-6 w-6 text-gray-500" />
-                  </button>
-                </div>
-                <div className="flex space-x-2 items-center">
-                  <label className="font-bold">User ID:</label>
-                  <p>{wallet.userID}</p>
-                </div>
-                <div className="flex space-x-2 items-center">
-                  <label className="font-bold">Identity:</label>
-                  <p>
-                    {wallet.userID.startsWith("S") ? "Student" : "Lecturer"}
-                  </p>
-                </div>
-                <div className="flex space-x-2">
-                  <h3 className="font-bold">Public Keys:</h3>
-                  {wallet.keyPairs.map((keyPair, index) => (
-                    <div key={index}>
-                      <input type="text" readOnly value={keyPair.publicKey} />
-                      <button
-                        onClick={() => copyToClipboard(keyPair.publicKey)}
-                      >
-                        Copy
-                      </button>
-                    </div>
-                  ))}
-                </div>
+          <h3 className="text-2xl font-semibold mb-8">Profile Information</h3>
+          {wallet ? (
+            <div className="flex flex-col space-y-1 w-1/2">
+              <div className="flex space-x-2 items-center">
+                <label className="font-bold">User_ID:</label>
+                <p className="px-2 py-1">{wallet.userID}</p>
               </div>
-            ) : (
-              <p>No wallet data available or failed to load.</p>
-            )}
-          </div>
+              <div className="flex space-x-2 items-center">
+                <label className="font-bold">Identity:</label>
+                <p
+                  className={`mx-1 my-1 px-2 py-1 rounded-3xl text-sm ${
+                    wallet.userID.startsWith("S") ? "bg-blue-500" : "bg-red-500"
+                  } text-white`}
+                >
+                  {wallet.userID.startsWith("S") ? "Student Permissions" : "Lecturer Permissions"}
+                </p>
+              </div>
+              <div className="flex space-x-2 items-center">
+                <label className="font-bold">Wallet_ID:</label>
+                <input
+                  type="text"
+                  className="w-full px-2 py-1 border rounded-md text-gray-700"
+                  readOnly
+                  value={wallet.id}
+                />
+                <button onClick={() => copyToClipboard(wallet.id)}>
+                  <DocumentDuplicateIcon className="h-5 w-5 text-gray-500" />
+                </button>
+              </div>
+
+              <div className="flex space-x-2 items-center">
+                <h3 className="font-bold">Address:</h3>
+                <input
+                  type="text"
+                  className="w-full px-2 py-1 border rounded-md text-gray-700"
+                  readOnly
+                  value={wallet.keyPairs[0].publicKey}
+                />
+                <button
+                  onClick={() => copyToClipboard(wallet.keyPairs[0].publicKey)}
+                >
+                  <DocumentDuplicateIcon className="h-5 w-5 text-gray-500" />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <p>No wallet data available or failed to load.</p>
+          )}
         </div>
 
         {/* Attendance Table */}
