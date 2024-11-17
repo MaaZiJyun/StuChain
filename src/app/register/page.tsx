@@ -26,7 +26,11 @@ const page = () => {
       const wallets = await API().createAWallet(role + userID, password);
       console.log("Wallets:", wallets);
     } catch (error) {
-      console.error("Error fetching wallets:", error);
+        if (error instanceof Error) {
+            setErrorMessageOnUserID(`${error.message}`);
+          } else {
+            setErrorMessageOnUserID("An unexpected error occurred");
+          }
     }
   };
 
@@ -41,12 +45,12 @@ const page = () => {
       if (enteredUserID.length <= 3) {
         setErrorMessageOnUserID("Please enter 4 digits numbers");
       } else {
-        const duplicate = await API().isUserIDDuplicate(role + enteredUserID);
-        if (duplicate) {
-          setErrorMessageOnUserID(`UserID ${enteredUserID} is already taken.`);
-        } else {
-          setErrorMessageOnUserID(""); // Clear error message if no duplicate
-        }
+        // const duplicate = await API().isUserIDDuplicate(role + enteredUserID);
+        // if (duplicate) {
+        //   setErrorMessageOnUserID(`UserID ${enteredUserID} is already taken.`);
+        // } else {
+        setErrorMessageOnUserID(""); // Clear error message if no duplicate
+        // }
       }
     }
   };

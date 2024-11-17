@@ -23,10 +23,14 @@ const page = () => {
   const signIn = async () => {
     try {
       // Call API function getAllWallets
-      const wallets = await API().getAllWallets();
+      const wallets = await API().verificationAuth(role + userID, password);
       console.log("Wallets:", wallets);
     } catch (error) {
-      console.error("Error fetching wallets:", error);
+      if (error instanceof Error) {
+        setErrorMessageOnUserID(`${error.message}`);
+      } else {
+        setErrorMessageOnUserID("An unexpected error occurred");
+      }
     }
   };
 
