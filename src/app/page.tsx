@@ -145,4 +145,4 @@ const ProtectedPage: React.FC = () => {
   );
 };
 
-export default WithAuth(ProtectedPage);
+export default ProtectedPage;

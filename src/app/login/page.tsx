@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import API from "../_controllers/api";
+import LocalStorage from "../_controllers/LocalStorage"
 import "./login.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -28,9 +29,9 @@ const page = () => {
       // Call API function getAllWallets
       const wallet = await API().verificationAuth(role + userID, password);
       // 假设登录成功后返回用户数据，存储用户ID
-      localStorage.setItem("wallet", wallet);
+      LocalStorage().setAttribute("wallet", wallet);
       // 登录成功后，重定向到主页
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessageOnUserID(`${error.message}`);
