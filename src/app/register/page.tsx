@@ -81,7 +81,7 @@ const page = () => {
 
         <div className="mb-4 flex items-center">
           <label className="block text-gray-500 text-sm mr-2">Role:</label>
-          <label className="mr-4">
+          <label className="mr-4 text-black">
             <input
               type="checkbox"
               checked={role === "S"}
@@ -90,7 +90,7 @@ const page = () => {
             />
             Student
           </label>
-          <label>
+          <label className="text-black">
             <input
               type="checkbox"
               checked={role === "L"}
@@ -111,7 +111,7 @@ const page = () => {
               id="readOnlyField"
               value={role}
               readOnly
-              className="w-7 p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-400"
+              className="w-7 p-2 border text-black border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-400"
             />
             <input
               type="text"

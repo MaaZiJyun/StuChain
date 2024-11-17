@@ -61,9 +61,9 @@ const API = () => {
 
   const verificationAuth = async (userID: string, password: string) => {
     const requestData = {
-        password: password, // Actual password text
-        userID: userID,
-      };
+      password: password, // Actual password text
+      userID: userID,
+    };
     try {
       const res = await fetch(ROOT + AUTH, {
         method: "POST",
@@ -80,6 +80,11 @@ const API = () => {
     } catch (err) {
       throw err; // Throw the error for further handling
     }
+  };
+
+  const removeAuth = () => {
+    // Clear user session storage or tokens
+    localStorage.removeItem("wallet"); // Example of clearing user data
   };
 
   const createAWallet = async (userID: string, password: string) => {
@@ -113,7 +118,8 @@ const API = () => {
     getAllWallets,
     createAWallet,
     isUserIDDuplicate,
-    verificationAuth
+    verificationAuth,
+    removeAuth,
   };
 };
 
