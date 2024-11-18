@@ -59,6 +59,20 @@ const API = () => {
     }
   };
 
+  async function fetchWalletByID(walletId: string) {
+    try {
+      const res = await fetch(`${ROOT + OPERATOR_WALLETS}/${walletId}`);
+      if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`);
+      }
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.error("There was an error retrieving the wallet:", error);
+      // Handle or display the error as needed
+    }
+  }
+
   const verificationAuth = async (userID: string, password: string) => {
     const requestData = {
       password: password, // Actual password text
@@ -120,6 +134,7 @@ const API = () => {
     isUserIDDuplicate,
     verificationAuth,
     removeAuth,
+    fetchWalletByID,
   };
 };
 

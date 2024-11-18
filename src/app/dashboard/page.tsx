@@ -13,31 +13,21 @@ import { useEffect, useState } from "react";
 import LocalStorage from "../_controllers/LocalStorage";
 import WithAuth from "../_components/WithAuth";
 import Link from "next/link";
-
-interface KeyPair {
-  publicKey: string;
-}
+import Profile from "../_components/Profile";
 
 interface Wallet {
   id: string;
   userID: string;
-  keyPairs: KeyPair[];
+  addresses: string[];
 }
 
 const page = () => {
   const api = API();
-  const [wallet, setWallet] = useState<Wallet | null>(null);
 
   function handleLogout(e: any): void {
     api.removeAuth();
     window.location.reload();
   }
-
-  useEffect(() => {
-    const wallet = LocalStorage().getAttribute("wallet");
-    setWallet(wallet);
-    console.log(wallet);
-  }, []);
 
   const teamMembers = [
     {
@@ -49,20 +39,8 @@ const page = () => {
     // Add more team members as needed
   ];
 
-  // Function to copy text to clipboard
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        alert(`Copied to clipboard: "${text}"`);
-      })
-      .catch((err) => {
-        console.error("Failed to copy: ", err);
-      });
-  };
-
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen flex bg-blue-600">
       <Head>
         <title>Attendance System</title>
         <meta
@@ -73,7 +51,7 @@ const page = () => {
       </Head>
 
       {/* Sidebar Navigation */}
-      <aside className="w-64 bg-blue-600 text-white flex flex-col py-20">
+      <aside className="w-64 text-white flex flex-col py-20">
         <div className="text-3xl font-bold mb-8 px-6">
           Blockchain Student Attendance System
         </div>
@@ -115,7 +93,7 @@ const page = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-grow p-6">
+      <main className="flex-grow p-6 bg-gray-100 rounded-l-xl my-3 shadow-md">
         {/* Search and Filters */}
         <div className="mb-6">
           <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md space-x-2">
@@ -132,58 +110,9 @@ const page = () => {
           </div>
         </div>
 
-        {/* Team Members */}
         <div className="bg-white shadow-md rounded-lg mb-6 p-4">
           <h3 className="text-2xl font-semibold mb-8">Profile Information</h3>
-          {wallet ? (
-            <div className="flex flex-col space-y-1 w-1/2">
-              <div className="flex space-x-2 items-center">
-                <label className="font-bold">User_ID:</label>
-                <p className="px-2 py-1">{wallet.userID}</p>
-              </div>
-              <div className="flex space-x-2 items-center">
-                <label className="font-bold">Identity:</label>
-                <p
-                  className={`mx-1 my-1 px-2 py-1 rounded-3xl text-sm ${
-                    wallet.userID.startsWith("S") ? "bg-blue-500" : "bg-red-500"
-                  } text-white`}
-                >
-                  {wallet.userID.startsWith("S")
-                    ? "Student Permissions"
-                    : "Lecturer Permissions"}
-                </p>
-              </div>
-              <div className="flex space-x-2 items-center">
-                <label className="font-bold">Wallet_ID:</label>
-                <input
-                  type="text"
-                  className="w-full px-2 py-1 border rounded-md text-gray-700"
-                  readOnly
-                  value={wallet.id}
-                />
-                <button onClick={() => copyToClipboard(wallet.id)}>
-                  <DocumentDuplicateIcon className="h-5 w-5 text-gray-500" />
-                </button>
-              </div>
-
-              <div className="flex space-x-2 items-center">
-                <h3 className="font-bold">Address:</h3>
-                <input
-                  type="text"
-                  className="w-full px-2 py-1 border rounded-md text-gray-700"
-                  readOnly
-                  value={wallet.keyPairs[0].publicKey}
-                />
-                <button
-                  onClick={() => copyToClipboard(wallet.keyPairs[0].publicKey)}
-                >
-                  <DocumentDuplicateIcon className="h-5 w-5 text-gray-500" />
-                </button>
-              </div>
-            </div>
-          ) : (
-            <p>No wallet data available or failed to load.</p>
-          )}
+          <Profile />
         </div>
 
         {/* Attendance Table */}
