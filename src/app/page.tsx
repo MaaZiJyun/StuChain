@@ -6,7 +6,8 @@ import API from "./_controllers/api";
 import Link from "next/link";
 
 const ProtectedPage: React.FC = () => {
-  const api = API();
+  
+const api = API();
 
   function handleLogout(e: any): void {
     api.removeAuth();

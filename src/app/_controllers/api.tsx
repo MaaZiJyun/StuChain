@@ -1,5 +1,6 @@
 const API = () => {
   const ROOT = "http://localhost:3001";
+//   const ROOT = "http://192.168.128.106:3001";
   const BLOCKCHAIN_BLOCKS = "/blockchain/blocks";
   const BLOCKCHAIN_TRANSACTIONS = "/blockchain/transactions";
   const OPERATOR = "/operator";

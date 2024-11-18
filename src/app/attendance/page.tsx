@@ -50,6 +50,7 @@ const page = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       {/* Sidebar Navigation */}
       <aside className="w-64 text-white flex flex-col py-20">
         <div className="text-3xl font-bold mb-8 px-6">
@@ -110,7 +111,7 @@ const page = () => {
           </div>
         </div>
 
-        <Profile />
+        <AddressesTable />
 
         {/* Attendance Table */}
         <div className="bg-white shadow-md rounded-lg p-4">

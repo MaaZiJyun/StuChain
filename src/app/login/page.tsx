@@ -82,7 +82,7 @@ const page = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form className="w-1/3 p-12 bg-white rounded shadow-md">
+      <form className="w-full lg:w-1/3 p-12 bg-white rounded shadow-md">
         <h1 className="text-3xl text-black mb-2 font-bold text-center">
           Sign in
         </h1>
