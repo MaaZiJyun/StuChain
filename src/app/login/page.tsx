@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 
 const page = () => {
   const router = useRouter();
+  const api = API();
 
   const [role, setRole] = useState("S");
   const [userID, setUserID] = useState("");
@@ -27,7 +28,7 @@ const page = () => {
   const signIn = async () => {
     try {
       // Call API function getAllWallets
-      const wallet = await API().verificationAuth(role + userID, password);
+      const wallet = await api.verificationAuth(role + userID, password);
       // 假设登录成功后返回用户数据，存储用户ID
       LocalStorage().setAttribute("wallet", wallet);
       // 登录成功后，重定向到主页

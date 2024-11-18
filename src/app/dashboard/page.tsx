@@ -25,10 +25,11 @@ interface Wallet {
 }
 
 const page = () => {
+  const api = API();
   const [wallet, setWallet] = useState<Wallet | null>(null);
 
   function handleLogout(e: any): void {
-    API().removeAuth();
+    api.removeAuth();
     window.location.reload();
   }
 
@@ -72,31 +73,31 @@ const page = () => {
       </Head>
 
       {/* Sidebar Navigation */}
-      <aside className="w-64 bg-blue-600 text-white flex flex-col px-6 py-20">
-        <div className="text-3xl font-bold mb-8">
+      <aside className="w-64 bg-blue-600 text-white flex flex-col py-20">
+        <div className="text-3xl font-bold mb-8 px-6">
           Blockchain Student Attendance System
         </div>
         <nav className="flex-grow">
-          <ul className="space-y-4">
-            <li>
+          <ul className="">
+            <li className="">
               <Link href="/dashboard">
-                <div className="flex text-white space-x-2">
+                <div className="flex text-white space-x-2 hover:bg-blue-800 px-6 py-4">
                   <AdjustmentsHorizontalIcon className="h-6 w-6" />
                   <span>Dashboard</span>
                 </div>
               </Link>
             </li>
-            <li>
+            <li className="">
               <Link href="/attendance">
-                <div className="flex text-white space-x-2">
+                <div className="flex text-white space-x-2 hover:bg-blue-800 px-6 py-4">
                   <ClipboardIcon className="h-6 w-6" />
                   <span>Attendance</span>
                 </div>
               </Link>
             </li>
-            <li>
+            <li className="">
               <Link href="/mining">
-                <div className="flex text-white space-x-2">
+                <div className="flex text-white space-x-2 hover:bg-blue-800 px-6 py-4">
                   <CubeIcon className="h-6 w-6" />
                   <span>Mining & Coins</span>
                 </div>
@@ -104,14 +105,13 @@ const page = () => {
             </li>
           </ul>
         </nav>
-        <div className="flex items-center mt-auto space-x-2">
-          <button onClick={handleLogout}>
-            <div className="flex text-white space-x-2">
-              <ArrowRightStartOnRectangleIcon className="h-6 w-6" />
-              <span>Logout</span>
-            </div>
-          </button>
-        </div>
+
+        <button onClick={handleLogout}>
+          <div className="flex text-white space-x-2 hover:bg-blue-800 px-6 py-4">
+            <ArrowRightStartOnRectangleIcon className="h-6 w-6" />
+            <span>Logout</span>
+          </div>
+        </button>
       </aside>
 
       {/* Main Content */}
@@ -148,7 +148,9 @@ const page = () => {
                     wallet.userID.startsWith("S") ? "bg-blue-500" : "bg-red-500"
                   } text-white`}
                 >
-                  {wallet.userID.startsWith("S") ? "Student Permissions" : "Lecturer Permissions"}
+                  {wallet.userID.startsWith("S")
+                    ? "Student Permissions"
+                    : "Lecturer Permissions"}
                 </p>
               </div>
               <div className="flex space-x-2 items-center">

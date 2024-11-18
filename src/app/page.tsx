@@ -2,13 +2,14 @@
 import React from "react";
 import WithAuth from "./_components/WithAuth";
 import API from "./_controllers/api";
-import { useRouter } from "next/navigation";
+
 import Link from "next/link";
 
 const ProtectedPage: React.FC = () => {
-  const router = useRouter();
+  const api = API();
+
   function handleLogout(e: any): void {
-    API().removeAuth();
+    api.removeAuth();
     window.location.reload();
   }
 

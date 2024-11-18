@@ -5,6 +5,8 @@ import "./register.css";
 import Link from "next/link";
 
 const page = () => {
+  const api = API();
+  
   const [role, setRole] = useState("S");
   const [userID, setUserID] = useState("");
   const [password, setPassword] = useState("");
@@ -23,14 +25,14 @@ const page = () => {
   const signUp = async () => {
     try {
       // Call API function getAllWallets
-      const wallets = await API().createAWallet(role + userID, password);
+      const wallets = await api.createAWallet(role + userID, password);
       console.log("Wallets:", wallets);
     } catch (error) {
-        if (error instanceof Error) {
-            setErrorMessageOnUserID(`${error.message}`);
-          } else {
-            setErrorMessageOnUserID("An unexpected error occurred");
-          }
+      if (error instanceof Error) {
+        setErrorMessageOnUserID(`${error.message}`);
+      } else {
+        setErrorMessageOnUserID("An unexpected error occurred");
+      }
     }
   };
 
