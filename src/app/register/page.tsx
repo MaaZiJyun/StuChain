@@ -3,15 +3,19 @@ import { useState } from "react";
 import API from "../_controllers/api";
 import "./register.css";
 import Link from "next/link";
+import Spinner from "../_components/Spinner";
+import { useRouter } from "next/navigation";
 
 const page = () => {
   const api = API();
-  
+  const router = useRouter();
+
   const [role, setRole] = useState("S");
   const [userID, setUserID] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessageOnUserID, setErrorMessageOnUserID] = useState("");
   const [errorMessageOnPwd, setErrorMessageOnPwd] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const buttonCheck = () => {
     return (
@@ -24,15 +28,19 @@ const page = () => {
 
   const signUp = async () => {
     try {
+      setLoading(true);
       // Call API function getAllWallets
       const wallets = await api.createAWallet(role + userID, password);
       console.log("Wallets:", wallets);
+      setLoading(false);
+      router.push("/login");
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessageOnUserID(`${error.message}`);
       } else {
         setErrorMessageOnUserID("An unexpected error occurred");
       }
+      setLoading(false);
     }
   };
 
@@ -76,31 +84,29 @@ const page = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form className="w-full max-w-sm p-6 bg-white rounded shadow-md">
-        <h1 className="text-4xl text-black font-bold">Sign up</h1>
-
-        <h2 className="text-lg text-black mb-8">to create an account</h2>
+      <form className="w-1/3 p-12 bg-white rounded shadow-md">
+        <h1 className="text-3xl text-black mb-2 font-bold text-center">
+          Sign up
+        </h1>
+        <h2 className="text-base text-black mb-8 text-center">
+          to create a new account
+        </h2>
 
         <div className="mb-4 flex items-center">
-          <label className="block text-gray-500 text-sm mr-2">Role:</label>
-          <label className="mr-4 text-black">
-            <input
-              type="checkbox"
-              checked={role === "S"}
-              onChange={() => handleRoleChange("S")}
-              className="mr-1"
-            />
-            Student
-          </label>
-          <label className="text-black">
-            <input
-              type="checkbox"
-              checked={role === "L"}
-              onChange={() => handleRoleChange("L")}
-              className="mr-1"
-            />
-            Lecturer
-          </label>
+          <input
+            type="checkbox"
+            checked={role === "S"}
+            onChange={() => handleRoleChange("S")}
+            className="mr-1"
+          />
+          <label className="mr-4 text-black text-sm">Student</label>
+          <input
+            type="checkbox"
+            checked={role === "L"}
+            onChange={() => handleRoleChange("L")}
+            className="mr-1"
+          />
+          <label className="text-black text-sm">Lecturer</label>
         </div>
 
         <div className="mb-4">
@@ -159,14 +165,9 @@ const page = () => {
           )}
         </div>
 
-        <div className="flex items-center mb-4">
-          <Link href="/login">
-            <span className="text-blue-500 hover:underline">
-              I had an account already
-            </span>
-          </Link>
-        </div>
-
+        {loading ? (
+          <Spinner size="h-12 w-12" color="text-blue-500" strokeWidth={2} />
+        ) : (
         <button
           type="button"
           onClick={signUp}
@@ -177,6 +178,14 @@ const page = () => {
         >
           Sign up
         </button>
+         )}
+
+         <div className="flex justify-center mt-2 text-sm space-x-2">
+           <p className="text-gray-500">I had an account already.</p>
+           <Link href="/login">
+             <p className="text-blue-500 hover:underline">Sign in</p>
+           </Link>
+         </div>
       </form>
     </div>
   );

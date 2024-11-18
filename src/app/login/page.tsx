@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
 import API from "../_controllers/api";
-import LocalStorage from "../_controllers/LocalStorage"
+import LocalStorage from "../_controllers/LocalStorage";
 import "./login.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Spinner from "../_components/Spinner";
 
 const page = () => {
   const router = useRouter();
@@ -15,6 +16,7 @@ const page = () => {
   const [password, setPassword] = useState("");
   const [errorMessageOnUserID, setErrorMessageOnUserID] = useState("");
   const [errorMessageOnPwd, setErrorMessageOnPwd] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const buttonCheck = () => {
     return (
@@ -27,11 +29,13 @@ const page = () => {
 
   const signIn = async () => {
     try {
+      setLoading(true);
       // Call API function getAllWallets
       const wallet = await api.verificationAuth(role + userID, password);
       // 假设登录成功后返回用户数据，存储用户ID
       LocalStorage().setAttribute("wallet", wallet);
       // 登录成功后，重定向到主页
+      setLoading(false);
       router.push("/dashboard");
     } catch (error) {
       if (error instanceof Error) {
@@ -39,6 +43,7 @@ const page = () => {
       } else {
         setErrorMessageOnUserID("An unexpected error occurred");
       }
+      setLoading(false);
     }
   };
 
@@ -77,31 +82,30 @@ const page = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form className="w-full max-w-sm p-6 bg-white rounded shadow-md">
-        <h1 className="text-4xl text-black font-bold">Sign in</h1>
+      <form className="w-1/3 p-12 bg-white rounded shadow-md">
+        <h1 className="text-3xl text-black mb-2 font-bold text-center">
+          Sign in
+        </h1>
 
-        <h2 className="text-lg text-black mb-8">to sign attendance</h2>
+        <h2 className="text-base text-black mb-8 text-center">
+          to continue to sign attendance
+        </h2>
 
         <div className="mb-4 flex items-center">
-          <label className="block text-black text-sm mr-2">Role:</label>
-          <label className="mr-4 text-black">
-            <input
-              type="checkbox"
-              checked={role === "S"}
-              onChange={() => handleRoleChange("S")}
-              className="mr-1"
-            />
-            Student
-          </label>
-          <label className="text-black">
-            <input
-              type="checkbox"
-              checked={role === "L"}
-              onChange={() => handleRoleChange("L")}
-              className="mr-1"
-            />
-            Lecturer
-          </label>
+          <input
+            type="checkbox"
+            checked={role === "S"}
+            onChange={() => handleRoleChange("S")}
+            className="mr-1"
+          />
+          <label className="mr-4 text-black text-sm">Student</label>
+          <input
+            type="checkbox"
+            checked={role === "L"}
+            onChange={() => handleRoleChange("L")}
+            className="mr-1"
+          />
+          <label className="text-black text-sm">Lecturer</label>
         </div>
 
         <div className="mb-4">
@@ -160,24 +164,27 @@ const page = () => {
           )}
         </div>
 
-        <div className="flex items-center mb-4">
+        {loading ? (
+          <Spinner size="h-12 w-12" color="text-blue-500" strokeWidth={2} />
+        ) : (
+          <button
+            type="button"
+            onClick={signIn}
+            disabled={buttonCheck()}
+            className={`w-full mt-4 py-2 ${
+              buttonCheck() ? "bg-gray-200" : "bg-blue-500 hover:bg-blue-600"
+            } text-white font-bold rounded transition duration-200`}
+          >
+            Sign in
+          </button>
+        )}
+
+        <div className="flex justify-center mt-2 text-sm space-x-2">
+          <p className="text-gray-500">I have no any account.</p>
           <Link href="/register">
-            <span className="text-blue-500 hover:underline">
-              I had an account already
-            </span>
+            <p className="text-blue-500 hover:underline">Sign up</p>
           </Link>
         </div>
-
-        <button
-          type="button"
-          onClick={signIn}
-          disabled={buttonCheck()}
-          className={`w-full mt-4 py-2 ${
-            buttonCheck() ? "bg-gray-200" : "bg-blue-500 hover:bg-blue-600"
-          } text-white font-bold rounded transition duration-200`}
-        >
-          Sign in
-        </button>
       </form>
     </div>
   );
