@@ -114,7 +114,7 @@ const Profile = () => {
         <label className="font-bold">Identity:</label>
         <p
           className={`mx-1 my-1 px-2 py-1 ${
-            isStudent ? "text-blue-500" : "text-red-500"
+            isStudent ? "text-green-500" : "text-blue-500"
           } `}
         >
           {isStudent ? "Student Permissions" : "Lecturer Permissions"}
