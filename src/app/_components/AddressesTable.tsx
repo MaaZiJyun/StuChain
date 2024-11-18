@@ -190,7 +190,7 @@ const AddressesTable = () => {
                 <td>
                   <PasswordWidget
                     buttonText="Get an Address"
-                    buttonClass="rounded-3xl text-white bg-blue-500 hover:bg-blue-700 my-1 text-sm px-2 py-1"
+                    buttonClass="rounded-3xl text-white bg-blue-500 hover:bg-blue-700 my-4 text-sm px-2 py-1"
                     onSubmit={handlePasswordSubmit}
                   />
                 </td>
