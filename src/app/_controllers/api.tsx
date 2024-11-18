@@ -127,6 +127,36 @@ const API = () => {
       throw err; // Throw the error for further handling
     }
   };
+
+  const createAnAddress = async (walletId: string, password: string) => {
+    const requestData = {
+      walletId: walletId,
+      password: password, // Actual password text
+    };
+    try {
+      const res = await fetch(
+        `${ROOT + OPERATOR_WALLETS}/${walletId}/addresses`,
+        {
+          method: "POST",
+          headers: HEADER2,
+          body: JSON.stringify(requestData),
+        }
+      );
+
+      if (!res.ok) {
+        // 尝试获取JSON错误详细信息
+        const errorData = await res.json();
+        console.log(errorData);
+        throw new Error(`Error: ${errorData.message}`);
+      }
+
+      const data = await res.json();
+      console.log(data);
+      return data; // Return the data for further use
+    } catch (err) {
+      throw err; // Throw the error for further handling
+    }
+  };
   // Return an object exposing the API functions
   return {
     getAllWallets,
@@ -135,6 +165,7 @@ const API = () => {
     verificationAuth,
     removeAuth,
     fetchWalletByID,
+    createAnAddress,
   };
 };
 
