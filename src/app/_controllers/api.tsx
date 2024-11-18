@@ -131,15 +131,19 @@ const API = () => {
   const createAnAddress = async (walletId: string, password: string) => {
     const requestData = {
       walletId: walletId,
-      password: password, // Actual password text
+      password: password,
     };
+    console.log("request: " + JSON.stringify(requestData));
     try {
       const res = await fetch(
         `${ROOT + OPERATOR_WALLETS}/${walletId}/addresses`,
         {
           method: "POST",
-          headers: HEADER2,
-          body: JSON.stringify(requestData),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            password: password, // Sending password in headers
+          },
         }
       );
 
@@ -150,9 +154,9 @@ const API = () => {
         throw new Error(`Error: ${errorData.message}`);
       }
 
-      const data = await res.json();
-      console.log(data);
-      return data; // Return the data for further use
+      const { address } = await res.json();
+      console.log(address);
+      return address; // Return the data for further use
     } catch (err) {
       throw err; // Throw the error for further handling
     }
