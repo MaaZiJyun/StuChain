@@ -20,12 +20,14 @@ const Profile = () => {
   const [assignedPassword, setAssignedPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isStudent, setIsStudent] = useState(true);
 
   useEffect(() => {
     const wallet = local.getAttribute("wallet");
     setWallet(wallet);
     console.log("Initial wallet:", wallet);
     if (wallet) {
+      setIsStudent(wallet.userID.startsWith("S"));
       refreshWallet(wallet.id);
     }
   }, []);
@@ -35,7 +37,7 @@ const Profile = () => {
       console.log("Password assigned:", assignedPassword);
       createAddress();
     }
-  }, [assignedPassword]); 
+  }, [assignedPassword]);
 
   const refreshWallet = async (walletId: string) => {
     if (walletId) {
@@ -112,12 +114,10 @@ const Profile = () => {
         <label className="font-bold">Identity:</label>
         <p
           className={`mx-1 my-1 px-2 py-1 ${
-            wallet.userID.startsWith("S") ? "text-blue-500" : "text-red-500"
+            isStudent ? "text-blue-500" : "text-red-500"
           } `}
         >
-          {wallet.userID.startsWith("S")
-            ? "Student Permissions"
-            : "Lecturer Permissions"}
+          {isStudent ? "Student Permissions" : "Lecturer Permissions"}
         </p>
       </div>
       <div className="flex space-x-2 items-center">
@@ -132,38 +132,79 @@ const Profile = () => {
           <DocumentDuplicateIcon className="h-5 w-5 text-gray-500" />
         </button>
       </div>
-      {firstAddress ? (
-        <div className="flex space-x-2 items-center">
-          <h3 className="font-bold">Address:</h3>
+      {isStudent ? (
+        <div>
+          {firstAddress ? (
+            <div className="flex space-x-2 items-center">
+              <h3 className="font-bold">Address:</h3>
 
-          <input
-            type="text"
-            className="w-full px-2 py-1 border rounded-md text-gray-700"
-            readOnly
-            value={firstAddress}
-          />
+              <input
+                type="text"
+                className="w-full px-2 py-1 border rounded-md text-gray-700"
+                readOnly
+                value={firstAddress}
+              />
 
-          <button onClick={() => copyToClipboard(firstAddress)}>
-            <DocumentDuplicateIcon className="h-5 w-5 text-gray-500" />
-          </button>
+              <button onClick={() => copyToClipboard(firstAddress)}>
+                <DocumentDuplicateIcon className="h-5 w-5 text-gray-500" />
+              </button>
+            </div>
+          ) : (
+            <div>
+              <div className="flex space-x-2 items-center">
+                <h3 className="font-bold">Address:</h3>
+
+                {error ? (
+                  <p className="mt-1 text-red-500">{error}</p>
+                ) : (
+                  <p className="text-gray-500">
+                    You need to create your first Address
+                  </p>
+                )}
+                <PasswordWidget
+                  buttonText="Get an Address"
+                  buttonClass="rounded-3xl text-white bg-blue-500 hover:bg-blue-700 my-1 text-sm px-2 py-1"
+                  onSubmit={handlePasswordSubmit}
+                />
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div>
-          <div className="flex space-x-2 items-center">
+          <div className="flex space-x-2 mt-2 items-start">
             <h3 className="font-bold">Address:</h3>
+            <ul className="space-y-2">
+              {wallet.addresses.map((address, index) => (
+                <li className="flex items-center space-x-2" key={index}>
+                  <label>{index}.</label>
+                  <input
+                    type="text"
+                    className="w-full px-2 py-1 border rounded-md text-gray-700"
+                    readOnly
+                    value={address}
+                  />
 
-            {error ? (
-              <p className="mt-1 text-red-500">{error}</p>
-            ) : (
-              <p className="text-gray-500">
-                You need to create your first Address
-              </p>
-            )}
-            <PasswordWidget
-              buttonText="Get an Address"
-              buttonClass="rounded-3xl text-white bg-blue-500 hover:bg-blue-700 my-1 text-sm px-2 py-1"
-              onSubmit={handlePasswordSubmit}
-            />
+                  <button onClick={() => copyToClipboard(address)}>
+                    <DocumentDuplicateIcon className="h-5 w-5 text-gray-500" />
+                  </button>
+                </li>
+              ))}
+              <li className="flex items-center space-x-2">
+                {error ? (
+                  <p className="mt-1 text-red-500">{error}</p>
+                ) : (
+                  <p className="text-gray-500">
+                    You need to create your first Address
+                  </p>
+                )}
+                <PasswordWidget
+                  buttonText="Get an Address"
+                  buttonClass="rounded-3xl text-white bg-blue-500 hover:bg-blue-700 my-1 text-sm px-2 py-1"
+                  onSubmit={handlePasswordSubmit}
+                />
+              </li>
+            </ul>
           </div>
         </div>
       )}
