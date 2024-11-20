@@ -1,6 +1,6 @@
 const LocalStorage = () => {
   // Function to set an item in localStorage
-  const setAttribute = async (name: string, value: string) => {
+  const setAttribute = async (name: string, value: string):Promise<boolean> => {
     try {
       localStorage.setItem(name, value);
       console.log(`Set ${name}: ${value} in localStorage`);
@@ -12,12 +12,14 @@ const LocalStorage = () => {
   };
 
   // Function to remove an item from localStorage
-  const removeAttribute = async (name: string) => {
+  const removeAttribute = async (name: string):Promise<boolean> => {
     try {
       localStorage.removeItem(name);
       console.log(`Removed ${name} from localStorage`);
+      return true;
     } catch (error) {
       console.error(`Failed to remove ${name} from localStorage:`, error);
+      return false;
     }
   };
 

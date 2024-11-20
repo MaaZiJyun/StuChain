@@ -27,10 +27,25 @@ export class UserClass {
     try {
       const data = JSON.parse(jsonString);
       // console.log("JSON.parse(jsonString)" + data);
+
       const address = data.addresses.length > 0 ? data.addresses[0] : "";
       console.log(data.addresses.length > 0);
+
       // console.log("JSON.parse(jsonString) modified address" + data);
       return new UserClass(data.id, data.userID, address);
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
+  static fromStorage(jsonString: string): UserClass | null {
+    try {
+      const data = JSON.parse(jsonString);
+      // console.log(data);
+      const user = new UserClass(data.walletId, data.userID, data.address);
+      // console.log(user);
+      return user;
     } catch (error) {
       console.log(error);
       return null;
@@ -49,9 +64,14 @@ export class UserClass {
     }
   }
 
-  async addAddress(password: string): Promise<UserClass> {
-    const newAddress = await API().createAnAddress(this.walletId, password);
-    console.log("New Address:", newAddress);
-    return newAddress;
+  async addAddress(password: string): Promise<string> {
+    try {
+      const newAddress = await API().createAnAddress(this.walletId, password);
+      console.log("New Address:", newAddress);
+      return newAddress;
+    } catch (error) {
+      console.error("Error creating address:", error);
+      throw error;
+    }
   }
 }

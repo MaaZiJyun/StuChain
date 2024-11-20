@@ -5,11 +5,10 @@ import PasswordWidget from "./PasswordWidget";
 import { UserClass } from "../_modules/UserClass";
 
 interface ProfileProps {
-  userInfo: UserClass; 
+  userInfo: UserClass;
 }
 
-const Profile:React.FC<ProfileProps> = ({userInfo}) => {
-
+const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
   const [user, setUser] = useState<UserClass>(userInfo);
   const [assignedPassword, setAssignedPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -17,6 +16,8 @@ const Profile:React.FC<ProfileProps> = ({userInfo}) => {
   const [isStudent, setIsStudent] = useState(true);
 
   useEffect(() => {
+    console.log(user instanceof UserClass); // Should output true
+    console.log(typeof user.addAddress);
     setIsStudent(user.userID.startsWith("S"));
   }, []);
 
@@ -33,7 +34,7 @@ const Profile:React.FC<ProfileProps> = ({userInfo}) => {
 
   const createAddress = async () => {
     if (user) {
-      user.addAddress(assignedPassword);
+      await user.addAddress(assignedPassword);
     }
   };
 

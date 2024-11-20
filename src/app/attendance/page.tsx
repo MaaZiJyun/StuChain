@@ -13,17 +13,18 @@ const page = () => {
   const api = API();
 
   const [user, setUser] = useState<UserClass>();
-  const [isStudent, setIsStudent] = useState(true);
   const [loading, setLoading] = useState<boolean>(true);
-  const local = LocalStorage();
 
   useEffect(() => {
-    const user = local.getAttribute("user");
-    setUser(user);
-    console.log("Initial wallet:", user);
-    if (user) {
-      setIsStudent(user.userID.startsWith("S"));
+    const data = LocalStorage().getAttribute("user");
+    const userString = JSON.stringify(data);
+    const userInstance = UserClass.fromStorage(userString);
+    if (userInstance) {
+      setUser(userInstance);
       setLoading(false);
+    } else {
+      setLoading(false);
+      throw new Error(`Error: User Instance is not existing`);
     }
   }, []);
 
