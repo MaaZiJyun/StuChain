@@ -2,10 +2,11 @@
 import { useState } from "react";
 import API from "../_controllers/api";
 import LocalStorage from "../_controllers/LocalStorage";
-import "./login.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Spinner from "../_components/Spinner";
+import { UserClass } from "../_modules/UserClass";
+import withOutAuth from "../_components/WithOutAuth";
 
 const page = () => {
   const router = useRouter();
@@ -30,13 +31,22 @@ const page = () => {
   const signIn = async () => {
     try {
       setLoading(true);
+      const newUser = new UserClass("", role + userID, "");
       // Call API function getAllWallets
-      const wallet = await api.verificationAuth(role + userID, password);
-      // 假设登录成功后返回用户数据，存储用户ID
-      LocalStorage().setAttribute("wallet", wallet);
-      // 登录成功后，重定向到主页
-      setLoading(false);
-      router.push("/dashboard");
+      const user = await api.verificationAuth(newUser.userID, password);
+      if (user !== null) {
+        // 假设登录成功后返回用户数据，存储用户ID
+        const result = await LocalStorage().setAttribute("user", user.toJSON());
+        if (result) {
+          // 登录成功后，重定向到主页
+          setLoading(false);
+          router.push("/dashboard");
+        }else{
+          console.log("localstorage storing error");
+        }
+      }else{
+        console.log("verification Auth error");
+      }
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessageOnUserID(`${error.message}`);
@@ -47,7 +57,7 @@ const page = () => {
     }
   };
 
-  const handleUserIDChange = async (e: any) => {
+  const handleUserIDEdit = async (e: any) => {
     const enteredUserID = e.target.value;
     setUserID(enteredUserID);
 
@@ -63,7 +73,7 @@ const page = () => {
     }
   };
 
-  const handlePasswordChange = (e: any) => {
+  const handlePasswordEdit = (e: any) => {
     const enteredPassword = e.target.value;
     setPassword(enteredPassword);
     const words = enteredPassword.trim().split(/\s+/);
@@ -76,13 +86,13 @@ const page = () => {
     }
   };
 
-  const handleRoleChange = (newRole: any) => {
+  const handleRoleEdit = (newRole: any) => {
     setRole(newRole);
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form className="w-full lg:w-1/3 p-12 bg-white rounded-xl shadow-md">
+      <form className="w-[90%] lg:w-1/3 p-12 bg-white rounded-xl shadow-md">
         <h1 className="text-3xl text-black mb-2 font-bold text-center">
           Sign in
         </h1>
@@ -95,14 +105,14 @@ const page = () => {
           <input
             type="checkbox"
             checked={role === "S"}
-            onChange={() => handleRoleChange("S")}
+            onChange={() => handleRoleEdit("S")}
             className="mr-1"
           />
           <label className="mr-4 text-black text-sm">Student</label>
           <input
             type="checkbox"
             checked={role === "L"}
-            onChange={() => handleRoleChange("L")}
+            onChange={() => handleRoleEdit("L")}
             className="mr-1"
           />
           <label className="text-black text-sm">Lecturer</label>
@@ -124,7 +134,7 @@ const page = () => {
               type="text"
               id="userID"
               value={userID}
-              onChange={handleUserIDChange}
+              onChange={handleUserIDEdit}
               // onChange={(e) => setUserID(e.target.value)} // Update state on change
               placeholder="Enter your NetID"
               className={`w-full p-2 border text-black border-gray-300 rounded focus:outline-none focus:ring ${
@@ -152,7 +162,7 @@ const page = () => {
             id="password"
             value={password}
             // onChange={(e) => setPassword(e.target.value)} // Update state on change
-            onChange={handlePasswordChange}
+            onChange={handlePasswordEdit}
             placeholder="Enter your NetPassword"
             className={`w-full p-2 border text-black border-gray-300 rounded focus:outline-none focus:ring ${
               errorMessageOnPwd ? "focus:ring-red-400" : "focus:ring-blue-400"
@@ -189,4 +199,4 @@ const page = () => {
     </div>
   );
 };
-export default page;
+export default withOutAuth(page);

@@ -1,6 +1,7 @@
+import { UserClass } from "../_modules/UserClass";
 const API = () => {
   const ROOT = "http://localhost:3001";
-//   const ROOT = "http://192.168.128.106:3001";
+  //   const ROOT = "http://192.168.128.106:3001";
   const BLOCKCHAIN_BLOCKS = "/blockchain/blocks";
   const BLOCKCHAIN_TRANSACTIONS = "/blockchain/transactions";
   const OPERATOR = "/operator";
@@ -18,63 +19,28 @@ const API = () => {
     Accept: "application/json",
   };
 
-  // Function to check if a userID is duplicate
-  const isUserIDDuplicate = async (userID: string) => {
-    try {
-      const wallets = await getAllWallets(); // Fetch all wallets data
-
-      // Check if any wallet has the same userID
-      const duplicate = wallets.some(
-        (wallet: { userID: string }) => wallet.userID === userID
-      );
-
-      if (duplicate) {
-        console.log(`UserID ${userID} is already taken.`);
-      } else {
-        console.log(`UserID ${userID} is available.`);
-      }
-
-      return duplicate; // Returns true if duplicate, false otherwise
-    } catch (error) {
-      console.error("Error checking userID duplication:", error);
-      return false; // Handle the error and assume no duplicate as a fallback
-    }
-  };
-
-  const getAllWallets = async () => {
-    try {
-      const res = await fetch(ROOT + OPERATOR_WALLETS, {
-        method: "GET",
-        headers: HEADER,
-      });
-
-      if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-      }
-
-      const data = await res.json();
-      console.log(data);
-      return data; // Return the data for further use
-    } catch (err) {
-      throw err; // Throw the error for further handling
-    }
-  };
-
-  async function fetchWalletByID(walletId: string) {
+  async function fetchWalletByID(walletId: string): Promise<UserClass | null> {
+    // Return a UserClass or undefined
     try {
       const res = await fetch(`${ROOT + OPERATOR_WALLETS}/${walletId}`);
       if (!res.ok) {
         throw new Error(`Error: ${res.statusText}`);
       }
       const data = await res.json();
-      return data;
+
+      // Assuming data is a single object matching UserClass structure
+      const userClassInstance = UserClass.fromJSON(JSON.stringify(data));
+      return userClassInstance; // Return the UserClass instance
     } catch (error) {
       console.error("There was an error retrieving the wallet:", error);
-      // Handle or display the error as needed
+      return null; // Return undefined if an error occurs
     }
   }
 
-  const verificationAuth = async (userID: string, password: string) => {
+  const verificationAuth = async (
+    userID: string,
+    password: string
+  ): Promise<UserClass | null> => {
     const requestData = {
       password: password, // Actual password text
       userID: userID,
@@ -90,16 +56,21 @@ const API = () => {
         throw new Error(`Error: ${res.status} ${res.statusText}`);
       }
 
-      const data = await res.json();
-      return data; // Return the data for further use
+      const data = await res.json(); // Assuming data is a single object matching UserClass structure
+      // console.log("data:"+data);
+      const jsonString = JSON.stringify(data);
+      console.log("jsonString:"+jsonString);
+      const userClassInstance = UserClass.fromJSON(jsonString);
+      // console.log("userClassInstance:"+userClassInstance);
+      return userClassInstance; // Return the UserClass instance
     } catch (err) {
-      throw err; // Throw the error for further handling
+      return null; // Return undefined if an error occurs
     }
   };
 
   const removeAuth = () => {
     // Clear user session storage or tokens
-    localStorage.removeItem("wallet"); // Example of clearing user data
+    localStorage.removeItem("user"); // Example of clearing user data
   };
 
   const createAWallet = async (userID: string, password: string) => {
@@ -164,9 +135,9 @@ const API = () => {
   };
   // Return an object exposing the API functions
   return {
-    getAllWallets,
+    // getAllWallets,
     createAWallet,
-    isUserIDDuplicate,
+    // isUserIDDuplicate,
     verificationAuth,
     removeAuth,
     fetchWalletByID,

@@ -2,13 +2,15 @@ const LocalStorage = () => {
   // Function to set an item in localStorage
   const setAttribute = async (name: string, value: string) => {
     try {
-      const newValue = JSON.stringify(value);
-      localStorage.setItem(name, newValue);
-      console.log(`Set ${name}: ${newValue} in localStorage`);
+      localStorage.setItem(name, value);
+      console.log(`Set ${name}: ${value} in localStorage`);
+      return true;
     } catch (error) {
       console.error(`Failed to set ${name} in localStorage:`, error);
+      return false;
     }
   };
+
   // Function to remove an item from localStorage
   const removeAttribute = async (name: string) => {
     try {
@@ -18,8 +20,9 @@ const LocalStorage = () => {
       console.error(`Failed to remove ${name} from localStorage:`, error);
     }
   };
+
   // Function to get an item from localStorage
-  const getAttribute = (name: string) => {
+  const getAttribute = (name: string)  => {
     try {
       const value = localStorage.getItem(name);
 

@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
 import API from "../_controllers/api";
-import "./register.css";
 import Link from "next/link";
 import Spinner from "../_components/Spinner";
 import { useRouter } from "next/navigation";
+import withOutAuth from "../_components/WithOutAuth";
 
 const page = () => {
   const api = API();
@@ -190,4 +190,4 @@ const page = () => {
     </div>
   );
 };
-export default page;
+export default withOutAuth(page);

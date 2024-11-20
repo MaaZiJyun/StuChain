@@ -1,34 +1,32 @@
 "use client";
 import Head from "next/head";
-import API from "../_controllers/api";
-
-import {
-  AdjustmentsHorizontalIcon,
-  ArrowRightStartOnRectangleIcon,
-  ClipboardIcon,
-  CubeIcon,
-  DocumentDuplicateIcon,
-} from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
-import LocalStorage from "../_controllers/LocalStorage";
 import WithAuth from "../_components/WithAuth";
-import Link from "next/link";
 import Profile from "../_components/Profile";
-import AddressesTable from "../_components/AddressesTable";
+import { useState } from "react";
+import Navbar from "../_components/Navbar";
+import SearchBar from "../_components/SearchBar";
 
-// interface Wallet {
-//   id: string;
-//   userID: string;
-//   addresses: string[];
-// }
+interface Attendance {
+  walletId: string;
+  password: string;
+  fromAddress: string;
+  toAddress: string;
+  amount: number;
+  changeAddress: string;
+  participantId: string;
+  hostId: string;
+  eventId: string;
+  deadline: string;
+  remark: string;
+}
+
+interface DateTime {
+  date: string;
+  time: string;
+}
 
 const page = () => {
-  const api = API();
-
-  function handleLogout(e: any): void {
-    api.removeAuth();
-    window.location.reload();
-  }
+  const [isStudent, setIsStudent] = useState(true);
 
   const teamMembers = [
     {
@@ -40,8 +38,62 @@ const page = () => {
     // Add more team members as needed
   ];
 
+  function formatDateTime(isoString: string): DateTime {
+    // Parse the ISO 8601 string into a Date object
+    const dateObject = new Date(isoString);
+
+    // Extract the date components
+    const year = dateObject.getFullYear();
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0"); // Months are 0-indexed
+    const day = dateObject.getDate().toString().padStart(2, "0");
+
+    // Extract the time components
+    const hours = dateObject.getHours().toString().padStart(2, "0");
+    const minutes = dateObject.getMinutes().toString().padStart(2, "0");
+    const seconds = dateObject.getSeconds().toString().padStart(2, "0");
+
+    // Format the date and time separately
+    const formattedDate = `${year}-${month}-${day}`;
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+    return {
+      date: formattedDate,
+      time: formattedTime,
+    };
+  }
+
+  // Creating a dummy data object adhering to the Attendance interface
+  const dummyAttendance: Attendance[] = [
+    {
+      walletId: "wallet_12345",
+      password: "securepassword123",
+      fromAddress: "addr_abc123456",
+      toAddress: "addr_def654321",
+      amount: 100,
+      changeAddress: "addr_change7890",
+      participantId: "participant_67890",
+      hostId: "host_id_13579",
+      eventId: "event_24680",
+      deadline: "2023-12-31T23:59:59", // ISO 8601 format for datetime
+      remark: "This is a dummy remark for testing purposes.",
+    },
+    {
+      walletId: "wallet_12345",
+      password: "securepassword123",
+      fromAddress: "addr_abc123456",
+      toAddress: "addr_def654321",
+      amount: 100,
+      changeAddress: "addr_change7890",
+      participantId: "participant_67890",
+      hostId: "host_id_13579",
+      eventId: "event_24680",
+      deadline: "2023-12-31T23:59:59", // ISO 8601 format for datetime
+      remark: "This is a dummy remark for testing purposes.",
+    },
+  ];
+
   return (
-    <div className="min-h-screen flex bg-blue-600">
+    <div className="min-h-screen lg:flex bg-blue-600">
       <Head>
         <title>Attendance System</title>
         <meta
@@ -50,93 +102,79 @@ const page = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* Sidebar Navigation */}
-      <aside className="w-64 text-white flex flex-col py-20">
-        <div className="text-3xl font-bold mb-8 px-6">
-          Blockchain Student Attendance System
-        </div>
-        <nav className="flex-grow">
-          <ul className="">
-            <li className="">
-              <Link href="/dashboard">
-                <div className="flex text-white space-x-2 hover:bg-blue-800 px-6 py-2">
-                  <AdjustmentsHorizontalIcon className="h-6 w-6" />
-                  <span>Dashboard</span>
-                </div>
-              </Link>
-            </li>
-            <li className="">
-              <Link href="/attendance">
-                <div className="flex text-white space-x-2 hover:bg-blue-800 px-6 py-2">
-                  <ClipboardIcon className="h-6 w-6" />
-                  <span>Attendance</span>
-                </div>
-              </Link>
-            </li>
-            <li className="">
-              <Link href="/mining">
-                <div className="flex text-white space-x-2 hover:bg-blue-800 px-6 py-2">
-                  <CubeIcon className="h-6 w-6" />
-                  <span>Mining & Coins</span>
-                </div>
-              </Link>
-            </li>
-          </ul>
-        </nav>
-
-        <button onClick={handleLogout}>
-          <div className="flex text-white space-x-2 hover:bg-blue-800 px-6 py-4">
-            <ArrowRightStartOnRectangleIcon className="h-6 w-6" />
-            <span>Logout</span>
-          </div>
-        </button>
-      </aside>
-
+      <Navbar />
       {/* Main Content */}
-      <main className="flex-grow p-6 bg-gray-100 rounded-l-xl my-3 shadow-md">
-        {/* Search and Filters */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md space-x-2">
-            <input
-              type="text"
-              placeholder="Search Attendance"
-              className="flex-grow p-2 border rounded-lg"
-            />
-            <select className="border rounded-lg p-2">
-              <option>by User ID</option>
-              <option>by Address</option>
-              {/* Add more years */}
-            </select>
-          </div>
-        </div>
-
+      <main className="w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
+        <SearchBar />
         <Profile />
-
-        {/* Attendance Table */}
-        <div className="bg-white shadow-md rounded-lg p-4">
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th className="text-left p-2">ID</th>
-                <th className="text-left p-2">User ID</th>
-                <th className="text-left p-2">Address</th>
-                <th className="text-left p-2">Date</th>
-                <th className="text-left p-2">Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-t">
-                <td className="p-2">1</td>
-                <td className="p-2">S2312</td>
-                <td className="p-2">
-                  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                </td>
-                <td className="p-2">20-08-2021</td>
-                <td className="p-2">09:00 AM</td>
-              </tr>
-              {/* Add more rows as necessary */}
-            </tbody>
-          </table>
+        <div className="bg-white shadow-md rounded-lg p-6">
+          {true ? (
+            <>
+              <h3 className="text-2xl font-semibold mb-8">
+                Events participated
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead>
+                    <tr>
+                      <th className="text-left p-2">Index</th>
+                      <th className="text-left p-2">Event ID</th>
+                      <th className="text-left p-2">Host ID</th>
+                      <th className="text-left p-2">Date</th>
+                      <th className="text-left p-2">Time</th>
+                      <th className="text-left p-2">Remark</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dummyAttendance.map((attendance, index) => {
+                      const dateTime = formatDateTime(attendance.deadline);
+                      return (
+                        <tr className="border-t" key={index}>
+                          <td className="p-2">{index}</td>
+                          <td className="p-2">{attendance.eventId}</td>
+                          <td className="p-2">{attendance.hostId}</td>
+                          <td className="p-2">{dateTime.date}</td>
+                          <td className="p-2">{dateTime.time}</td>
+                          <td className="p-2">{attendance.remark}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3 className="text-2xl font-semibold mb-8">Events Held</h3>
+              <table className="w-full">
+                <thead>
+                  <tr>
+                    <th className="text-left p-2">Index</th>
+                    <th className="text-left p-2">Event ID</th>
+                    <th className="text-left p-2">Host ID</th>
+                    <th className="text-left p-2">Date</th>
+                    <th className="text-left p-2">Time</th>
+                    <th className="text-left p-2">Remark</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dummyAttendance.map((attendance, index) => {
+                    const dateTime = formatDateTime(attendance.deadline);
+                    return (
+                      <tr className="border-t" key={index}>
+                        <td className="p-2">{index}</td>
+                        <td className="p-2">{attendance.eventId}</td>
+                        <td className="p-2">{attendance.hostId}</td>
+                        <td className="p-2">{dateTime.date}</td>
+                        <td className="p-2">{dateTime.time}</td>
+                        <td className="p-2">{attendance.remark}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </>
+          )}
           <div className="flex justify-between mt-4 text-sm">
             <div>
               Show{" "}
