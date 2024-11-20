@@ -34,7 +34,15 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
 
   const createAddress = async () => {
     if (user) {
-      await user.addAddress(assignedPassword);
+      const newAddr = await user.addAddress(assignedPassword);
+      // const newUser = new UserClass(user.walletId, user.userID, newAddr);
+      // setUser(newUser);
+      const newUser = await user.refreshUser();
+      if (newUser) {
+        setUser(newUser);
+      }
+    } else {
+      throw new Error(`Error: Failed to add address`);
     }
   };
 

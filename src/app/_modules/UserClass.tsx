@@ -55,10 +55,15 @@ export class UserClass {
   async refreshUser(): Promise<UserClass | null> {
     const newWallet = await API().fetchWalletByID(this.walletId);
     // Call api to generate a new address in back-end
-    const result = await LocalStorage().setAttribute("user", this.toJSON());
     // Synchronize the information changed in back-end
-    if (result) {
-      return newWallet;
+    if (newWallet) {
+      const result = await LocalStorage().setAttribute(
+        "user",
+        newWallet.toJSON()
+      );
+      if (result) {
+        return newWallet;
+      } else return null;
     } else {
       return null;
     }

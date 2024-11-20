@@ -44,16 +44,6 @@ const page = () => {
     }
   }, []);
 
-  const teamMembers = [
-    {
-      name: "Jessica Goldsmith",
-      role: "Software Engineer",
-      image: "/images/jessica.jpg",
-    },
-    { name: "John Doe", role: "UI/UX Designer", image: "/images/john.jpg" },
-    // Add more team members as needed
-  ];
-
   function formatDateTime(isoString: string): DateTime {
     // Parse the ISO 8601 string into a Date object
     const dateObject = new Date(isoString);
