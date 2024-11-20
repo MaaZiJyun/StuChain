@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from "react"; // Ensure you have this icon imported
-import LocalStorage from "../_controllers/LocalStorage";
-import { DocumentDuplicateIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import Spinner from "./Spinner";
 import PasswordWidget from "./PasswordWidget";
 import { UserClass } from "../_modules/UserClass";
 
-const Profile = () => {
-  const local = LocalStorage();
+interface ProfileProps {
+  userInfo: UserClass; 
+}
 
-  const [user, setUser] = useState<UserClass | null>(null);
+const Profile:React.FC<ProfileProps> = ({userInfo}) => {
+
+  const [user, setUser] = useState<UserClass>(userInfo);
   const [assignedPassword, setAssignedPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [isStudent, setIsStudent] = useState(true);
 
   useEffect(() => {
-    const user = local.getAttribute("user");
-    setUser(user);
-    console.log("Initial wallet:", user);
-    if (user) {
-      setIsStudent(user.userID.startsWith("S"));
-      setLoading(false);
-    }
+    setIsStudent(user.userID.startsWith("S"));
   }, []);
 
   useEffect(() => {

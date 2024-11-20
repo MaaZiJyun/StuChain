@@ -2,9 +2,12 @@
 import Head from "next/head";
 import WithAuth from "../_components/WithAuth";
 import Profile from "../_components/Profile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../_components/Navbar";
 import SearchBar from "../_components/SearchBar";
+import LocalStorage from "../_controllers/LocalStorage";
+import Spinner from "../_components/Spinner";
+import { UserClass } from "../_modules/UserClass";
 
 interface Attendance {
   walletId: string;
@@ -26,7 +29,20 @@ interface DateTime {
 }
 
 const page = () => {
+  const [user, setUser] = useState<UserClass>();
   const [isStudent, setIsStudent] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const local = LocalStorage();
+
+  useEffect(() => {
+    const user = local.getAttribute("user");
+    setUser(user);
+    console.log("Initial wallet:", user);
+    if (user) {
+      setIsStudent(user.userID.startsWith("S"));
+      setLoading(false);
+    }
+  }, []);
 
   const teamMembers = [
     {
@@ -92,21 +108,19 @@ const page = () => {
     },
   ];
 
+  if (loading) {
+    return (
+      <div className="w-full h-screen bg-blue-500">
+        <Spinner size="h-20 w-20" color="text-white" strokeWidth={2} />
+      </div>
+    ); // Display loading indicator
+  }
   return (
-    <div className="min-h-screen lg:flex bg-blue-600">
-      <Head>
-        <title>Attendance System</title>
-        <meta
-          name="description"
-          content="Efficient attendance tracking system"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div className="h-screen lg:flex bg-blue-600">
       <Navbar />
-      {/* Main Content */}
-      <main className="w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
-        <SearchBar />
-        <Profile />
+      <main className="overflow-y-auto w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
+        {user && <SearchBar userInfo={user} />}
+        {user && <Profile userInfo={user} />}
         <div className="bg-white shadow-md rounded-lg p-6">
           {true ? (
             <>

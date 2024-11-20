@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react"; // Ensure you have this icon imported
 import API from "../_controllers/api";
 import LocalStorage from "../_controllers/LocalStorage";
-import Spinner from "./Spinner";
 import { UserClass } from "../_modules/UserClass";
 import QRCodeScanner from "./QRCodeScanner";
 import { TransactionClass } from "../_modules/TransactionClass";
 import {
-  ArrowUpTrayIcon,
   DocumentDuplicateIcon,
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
@@ -79,8 +77,8 @@ const AttendanceWidget = () => {
 
   if (loading) {
     return (
-      <button className="flex items-center space-x-2 text-black hover:text-gray-300 border-2-solid rounded-lg">
-        <QrCodeIcon className="h-8 w-8 " />
+      <button className="flex items-center space-x-2 text-black border-2-solid rounded-lg">
+        <QrCodeIcon className="h-10 w-10 " />
       </button>
     ); // Display loading indicator
   }
@@ -91,7 +89,7 @@ const AttendanceWidget = () => {
         onClick={openWidget}
         className="flex items-center space-x-2 text-black hover:text-blue-500 border-2-solid rounded-lg"
       >
-        <QrCodeIcon className="h-10 w-10 " />
+        <QrCodeIcon className="h-10 w-10"/>
       </button>
 
       {isOpenning && (
