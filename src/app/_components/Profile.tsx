@@ -60,24 +60,25 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
     return (
       <div className="bg-white shadow-md text-black rounded-lg mb-6 p-6">
         <h3 className="text-2xl font-semibold mb-8">Profile Information</h3>
-        <div className="flex flex-col space-y-1 w-full">
+        <div className="flex flex-col space-y-2 w-full">
           <div className="flex space-x-2 items-center">
             <label className="font-bold w-20">User_ID:</label>
-            <p className="py-1">{user.userID}</p>
+            <p className="">{user.userID}</p>
           </div>
           <div className="flex space-x-2 items-center">
             <label className="font-bold w-20">Identity:</label>
-            <p
-              className={`py-1 ${
-                isStudent ? "text-green-500" : "text-blue-500"
-              } `}
-            >
-              {isStudent ? "Student Permissions" : "Lecturer Permissions"}
-            </p>
+            {isStudent ? (
+              <p className={`text-green-500`}>Student Permissions</p>
+            ) : (
+              <p className={`text-blue-500`}>Lecturer Permissions</p>
+            )}
           </div>
           <div className="flex space-x-2 items-center">
             <label className="font-bold w-20">Wallet_ID:</label>
-            <p className="py-1">{user.walletId}</p>
+            <div className="w-full lg:w-1/3 truncate overflow-hidden whitespace-nowrap">
+              <span className="py-1">{user.walletId}</span>
+              <span>...</span>
+            </div>
             <button onClick={() => copyToClipboard(user.walletId)}>
               <DocumentDuplicateIcon className="h-5 w-5 text-black hover:text-blue-500" />
             </button>
@@ -87,10 +88,13 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
             <label className="font-bold w-20">Address:</label>
             {user.address !== "" ? (
               <>
-                 <p className="py-1">{user.address}</p>
+                <div className="w-full lg:w-1/3 truncate overflow-hidden whitespace-nowrap">
+                  <span className="py-1">{user.address}</span>
+                  <span>...</span>
+                </div>
 
                 <button onClick={() => copyToClipboard(user.address)}>
-                <DocumentDuplicateIcon className="h-5 w-5 text-black hover:text-blue-500" />
+                  <DocumentDuplicateIcon className="h-5 w-5 text-black hover:text-blue-500" />
                 </button>
               </>
             ) : (
@@ -98,7 +102,7 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
                 {error ? (
                   <p className="mt-1 text-red-500">{error}</p>
                 ) : (
-                  <p className="text-gray-500">
+                  <p className="py-1 text-gray-500">
                     You need to create your first Address
                   </p>
                 )}
