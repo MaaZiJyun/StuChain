@@ -7,6 +7,7 @@ import SearchBar from "../_components/SearchBar";
 import LocalStorage from "../_controllers/LocalStorage";
 import Spinner from "../_components/Spinner";
 import { UserClass } from "../_modules/UserClass";
+import QRCodeGenerator from "../_components/QRCodeGenerator";
 
 interface Attendance {
   walletId: string;
@@ -30,6 +31,7 @@ interface DateTime {
 const page = () => {
   const [user, setUser] = useState<UserClass>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [isStudent, setIsStudent] = useState<boolean>(true);
 
   useEffect(() => {
     const data = LocalStorage().getAttribute("user");
@@ -37,6 +39,12 @@ const page = () => {
     const userInstance = UserClass.fromStorage(userString);
     if (userInstance) {
       setUser(userInstance);
+
+      // test
+      if (user) {
+        setIsStudent(user.userID.startsWith("S"));
+      }
+
       setLoading(false);
     } else {
       setLoading(false);
@@ -97,8 +105,8 @@ const page = () => {
         <main className="overflow-y-auto w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
           {user && <SearchBar userInfo={user} />}
           {user && <Profile userInfo={user} />}
-          <div className="bg-white shadow-md rounded-lg p-6">
-            {true ? (
+          <div className="bg-white shadow-md rounded-lg p-6 text-black">
+            {isStudent ? (
               <>
                 <h3 className="text-2xl font-semibold mb-8">
                   Events participated
@@ -145,6 +153,7 @@ const page = () => {
                       <th className="text-left p-2">Date</th>
                       <th className="text-left p-2">Time</th>
                       <th className="text-left p-2">Remark</th>
+                      <th className="text-left p-2">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -158,6 +167,12 @@ const page = () => {
                           <td className="p-2">{dateTime.date}</td>
                           <td className="p-2">{dateTime.time}</td>
                           <td className="p-2">{attendance.remark}</td>
+                          <td className="p-2">
+                            <QRCodeGenerator
+                              buttonClass={"text-black hover:text-blue-500"}
+                              qrCodeData={JSON.stringify(attendance)}
+                            />
+                          </td>
                         </tr>
                       );
                     })}

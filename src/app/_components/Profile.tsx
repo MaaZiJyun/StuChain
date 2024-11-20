@@ -63,12 +63,12 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
         <div className="flex flex-col space-y-1 w-full">
           <div className="flex space-x-2 items-center">
             <label className="font-bold w-20">User_ID:</label>
-            <p className="px-2 py-1">{user.userID}</p>
+            <p className="py-1">{user.userID}</p>
           </div>
           <div className="flex space-x-2 items-center">
             <label className="font-bold w-20">Identity:</label>
             <p
-              className={`mx-1 my-1 px-2 py-1 ${
+              className={`py-1 ${
                 isStudent ? "text-green-500" : "text-blue-500"
               } `}
             >
@@ -79,7 +79,7 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
             <label className="font-bold w-20">Wallet_ID:</label>
             <input
               type="text"
-              className="w-full lg:w-1/2 px-2 py-1 border rounded-md text-gray-700"
+              className="flex-grow lg:w-1/2 px-2 py-1 border rounded-md text-gray-700"
               readOnly
               value={user.walletId}
             />
@@ -87,11 +87,11 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
               <DocumentDuplicateIcon className="h-5 w-5 text-gray-500" />
             </button>
           </div>
-          <div>
-            {user.address !== "" ? (
-              <div className="flex space-x-2 items-center">
-                <h3 className="font-bold w-20">Address:</h3>
 
+          <div className="flex space-x-2 items-center">
+            <label className="font-bold w-20">Address:</label>
+            {user.address !== "" ? (
+              <>
                 <input
                   type="text"
                   className="w-full lg:w-1/2 px-2 py-1 border rounded-md text-gray-700"
@@ -102,26 +102,22 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
                 <button onClick={() => copyToClipboard(user.address)}>
                   <DocumentDuplicateIcon className="h-5 w-5 text-gray-500" />
                 </button>
-              </div>
+              </>
             ) : (
-              <div>
-                <div className="flex space-x-2 items-center">
-                  <h3 className="font-bold">Address:</h3>
-
-                  {error ? (
-                    <p className="mt-1 text-red-500">{error}</p>
-                  ) : (
-                    <p className="text-gray-500">
-                      You need to create your first Address
-                    </p>
-                  )}
-                  <PasswordWidget
-                    buttonText="Get an Address"
-                    buttonClass="rounded-3xl text-white bg-blue-500 hover:bg-blue-700 my-1 text-sm px-2 py-1"
-                    onSubmit={handlePasswordSubmit}
-                  />
-                </div>
-              </div>
+              <>
+                {error ? (
+                  <p className="mt-1 text-red-500">{error}</p>
+                ) : (
+                  <p className="text-gray-500">
+                    You need to create your first Address
+                  </p>
+                )}
+                <PasswordWidget
+                  buttonText="Get an Address"
+                  buttonClass="rounded-3xl text-white bg-blue-500 hover:bg-blue-700 my-1 text-sm px-2 py-1"
+                  onSubmit={handlePasswordSubmit}
+                />
+              </>
             )}
           </div>
         </div>

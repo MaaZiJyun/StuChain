@@ -41,12 +41,13 @@ const page = () => {
           // 登录成功后，重定向到主页
           setLoading(false);
           router.push("/dashboard");
-        }else{
-          console.log("localstorage storing error");
+        } else {
+          setErrorMessageOnUserID("Storing error");
         }
-      }else{
-        console.log("verification Auth error");
+      } else {
+        setErrorMessageOnUserID("verification Auth error");
       }
+      setLoading(false);
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessageOnUserID(`${error.message}`);

@@ -1,16 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import QRCode from "qrcode";
-import { QrCodeIcon } from "@heroicons/react/16/solid";
+import { QrCodeIcon } from "@heroicons/react/24/outline";
 
 interface QRCodeWidgetProps {
-  buttonText: string; // Define the expected prop type
   buttonClass: string;
   qrCodeData: string;
 }
 
 const QRCodeGenerator: React.FC<QRCodeWidgetProps> = ({
-  buttonText,
   buttonClass,
   qrCodeData,
 }) => {
@@ -40,7 +38,7 @@ const QRCodeGenerator: React.FC<QRCodeWidgetProps> = ({
   return (
     <>
       <button onClick={openWidget} className={`${buttonClass}`}>
-        <QrCodeIcon className="h-5 w-5 text-gray-500 hover:text-black" />
+        <QrCodeIcon className="h-7 w-7" />
       </button>
 
       {isVisible && (
