@@ -8,6 +8,7 @@ import LocalStorage from "../_controllers/LocalStorage";
 import Spinner from "../_components/Spinner";
 import { UserClass } from "../_modules/UserClass";
 import QRCodeGenerator from "../_components/QRCodeGenerator";
+import DateTimeFormator from "../_controllers/DateTimeFormator";
 
 interface Attendance {
   walletId: string;
@@ -21,11 +22,6 @@ interface Attendance {
   eventId: string;
   deadline: string;
   remark: string;
-}
-
-interface DateTime {
-  date: string;
-  time: string;
 }
 
 const page = () => {
@@ -50,30 +46,6 @@ const page = () => {
       setLoading(false);
     }
   }, []);
-
-  function formatDateTime(isoString: string): DateTime {
-    // Parse the ISO 8601 string into a Date object
-    const dateObject = new Date(isoString);
-
-    // Extract the date components
-    const year = dateObject.getFullYear();
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0"); // Months are 0-indexed
-    const day = dateObject.getDate().toString().padStart(2, "0");
-
-    // Extract the time components
-    const hours = dateObject.getHours().toString().padStart(2, "0");
-    const minutes = dateObject.getMinutes().toString().padStart(2, "0");
-    const seconds = dateObject.getSeconds().toString().padStart(2, "0");
-
-    // Format the date and time separately
-    const formattedDate = `${year}-${month}-${day}`;
-    const formattedTime = `${hours}:${minutes}:${seconds}`;
-
-    return {
-      date: formattedDate,
-      time: formattedTime,
-    };
-  }
 
   // Creating a dummy data object adhering to the Attendance interface
   const dummyAttendance: Attendance[] = [
@@ -125,7 +97,7 @@ const page = () => {
                     </thead>
                     <tbody>
                       {dummyAttendance.map((attendance, index) => {
-                        const dateTime = formatDateTime(attendance.deadline);
+                        const dateTime = DateTimeFormator.formatDateTime(attendance.deadline);
                         return (
                           <tr className="border-t" key={index}>
                             <td className="p-2">{index}</td>
@@ -158,7 +130,7 @@ const page = () => {
                   </thead>
                   <tbody>
                     {dummyAttendance.map((attendance, index) => {
-                      const dateTime = formatDateTime(attendance.deadline);
+                      const dateTime = DateTimeFormator.formatDateTime(attendance.deadline);
                       return (
                         <tr className="border-t" key={index}>
                           <td className="p-2">{index}</td>

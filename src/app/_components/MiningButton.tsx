@@ -1,7 +1,9 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Spinner from './Spinner';
+import { useState } from "react";
+import Spinner from "./Spinner";
+import DTFormator from "../_controllers/DateTimeFormator";
+import { WrenchIcon } from "@heroicons/react/24/outline";
 
 interface Block {
   index: number;
@@ -23,50 +25,52 @@ const MiningButton = () => {
     setNewBlock(null);
 
     try {
-      const response = await fetch('http://localhost:3001/miner/mine', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/miner/mine", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
       if (!response.ok) {
-        throw new Error('Mining failed');
+        throw new Error("Mining failed");
       }
 
       const data = await response.json();
       setNewBlock(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to mine block');
+      setError(err instanceof Error ? err.message : "Failed to mine block");
     } finally {
       setLoading(false);
     }
   };
 
-  const formatTimestamp = (timestamp: number) => {
-    return new Date(timestamp * 1000).toLocaleString();
-  };
-
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-bold">Mining Control</h3>
-        <button
-          onClick={handleMining}
-          disabled={loading}
-          className={`px-6 py-2 rounded-lg text-white font-semibold flex items-center space-x-2
-            ${loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
-        >
+    <div className="bg-white text-black shadow-md rounded-lg mb-6">
+      <button
+        onClick={handleMining}
+        disabled={loading}
+        className={`flex w-full px-6 py-2 rounded-lg text-white items-center justify-center
+            ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-700"
+            }`}
+      >
+        <div className="flex items-center justify-between">
           {loading ? (
             <>
               <Spinner size="h-5 w-5" color="text-white" strokeWidth={2} />
               <span>Mining...</span>
             </>
           ) : (
-            'Start Mining'
+            <>
+              <WrenchIcon className="h-5 w-5" />
+              <span>Start Mining</span>
+            </>
           )}
-        </button>
-      </div>
+        </div>
+      </button>
 
       {error && (
         <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
@@ -75,8 +79,7 @@ const MiningButton = () => {
       )}
 
       {newBlock && (
-        <div className="mt-4">
-          <h4 className="font-semibold mb-2">New Block Mined!</h4>
+        <div className="">
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -93,15 +96,21 @@ const MiningButton = () => {
               </div>
               <div className="col-span-2">
                 <p className="text-sm text-gray-600">Previous Hash</p>
-                <p className="font-mono text-sm break-all">{newBlock.previousHash}</p>
+                <p className="font-mono text-sm break-all">
+                  {newBlock.previousHash}
+                </p>
               </div>
               <div className="col-span-2">
                 <p className="text-sm text-gray-600">Timestamp</p>
-                <p className="font-mono">{formatTimestamp(newBlock.timestamp)}</p>
+                <p className="font-mono">
+                  {DTFormator.formatTimestamp(newBlock.timestamp).toString()}
+                </p>
               </div>
               <div className="col-span-2">
                 <p className="text-sm text-gray-600">Transactions</p>
-                <p className="font-mono">{newBlock.transactions.length} transactions</p>
+                <p className="font-mono">
+                  {newBlock.transactions.length} transactions
+                </p>
               </div>
             </div>
           </div>
@@ -111,4 +120,4 @@ const MiningButton = () => {
   );
 };
 
-export default MiningButton; 
+export default MiningButton;
