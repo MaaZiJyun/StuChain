@@ -55,7 +55,6 @@ const API = () => {
       if (!res.ok) {
         throw new Error(`Error: ${res.status} ${res.statusText}`);
       }
-
       const data = await res.json(); // Assuming data is a single object matching UserClass structure
       // console.log("data:"+data);
       const jsonString = JSON.stringify(data);

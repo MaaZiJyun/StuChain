@@ -4,30 +4,42 @@ import API from "../_controllers/api";
 import WithAuth from "../_components/WithAuth";
 import Navbar from "../_components/Navbar";
 import SearchBar from "../_components/SearchBar";
+import { useEffect, useState } from "react";
+import { UserClass } from "../_modules/UserClass";
+import LocalStorage from "../_controllers/LocalStorage";
+import Spinner from "../_components/Spinner";
 
 const page = () => {
   const api = API();
 
-  function handleLogout(e: any): void {
-    api.removeAuth();
-    window.location.reload();
-  }
+  const [user, setUser] = useState<UserClass>();
+  const [isStudent, setIsStudent] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const local = LocalStorage();
 
-  const teamMembers = [
-    {
-      name: "Jessica Goldsmith",
-      role: "Software Engineer",
-      image: "/images/jessica.jpg",
-    },
-    { name: "John Doe", role: "UI/UX Designer", image: "/images/john.jpg" },
-    // Add more team members as needed
-  ];
+  useEffect(() => {
+    const user = local.getAttribute("user");
+    setUser(user);
+    console.log("Initial wallet:", user);
+    if (user) {
+      setIsStudent(user.userID.startsWith("S"));
+      setLoading(false);
+    }
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen bg-blue-500">
+        <Spinner size="h-20 w-20" color="text-white" strokeWidth={2} />
+      </div>
+    ); // Display loading indicator
+  }
 
   return (
     <div className="h-screen lg:flex bg-blue-600">
       <Navbar />
       <main className="overflow-y-auto w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
-        <SearchBar />
+        {user && <SearchBar userInfo={user} />}
         <div className="bg-white shadow-md rounded-lg p-6">
           <div className="overflow-x-auto">
             <table className="w-full">

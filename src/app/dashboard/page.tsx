@@ -1,5 +1,4 @@
 "use client";
-import Head from "next/head";
 import WithAuth from "../_components/WithAuth";
 import Profile from "../_components/Profile";
 import { useEffect, useState } from "react";
@@ -80,19 +79,6 @@ const page = () => {
 
   // Creating a dummy data object adhering to the Attendance interface
   const dummyAttendance: Attendance[] = [
-    {
-      walletId: "wallet_12345",
-      password: "securepassword123",
-      fromAddress: "addr_abc123456",
-      toAddress: "addr_def654321",
-      amount: 100,
-      changeAddress: "addr_change7890",
-      participantId: "participant_67890",
-      hostId: "host_id_13579",
-      eventId: "event_24680",
-      deadline: "2023-12-31T23:59:59", // ISO 8601 format for datetime
-      remark: "This is a dummy remark for testing purposes.",
-    },
     {
       walletId: "wallet_12345",
       password: "securepassword123",
