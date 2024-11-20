@@ -15,7 +15,7 @@ const Navbar = () => {
   }
   return (
     <>
-      <aside className="hidden lg:flex lg:w-64 text-white flex-col py-20">
+      <aside className="hidden lg:flex lg:w-64 text-white flex-col py-12">
         <div className="text-3xl font-bold mb-8 px-6">
           Blockchain Student Attendance System
         </div>
@@ -23,7 +23,7 @@ const Navbar = () => {
           <ul className="">
             <li className="">
               <Link href="/dashboard">
-                <div className="flex text-white space-x-2 hover:bg-blue-800 px-6 py-2">
+                <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
                   <AdjustmentsHorizontalIcon className="h-6 w-6" />
                   <span>Dashboard</span>
                 </div>
@@ -31,7 +31,7 @@ const Navbar = () => {
             </li>
             <li className="">
               <Link href="/attendance">
-                <div className="flex text-white space-x-2 hover:bg-blue-800 px-6 py-2">
+                <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
                   <ClipboardIcon className="h-6 w-6" />
                   <span>Attendance</span>
                 </div>
@@ -39,9 +39,9 @@ const Navbar = () => {
             </li>
             <li className="">
               <Link href="/mining">
-                <div className="flex text-white space-x-2 hover:bg-blue-800 px-6 py-2">
+                <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
                   <CubeIcon className="h-6 w-6" />
-                  <span>Mining & Coins</span>
+                  <span>Blockchain</span>
                 </div>
               </Link>
             </li>
@@ -49,7 +49,7 @@ const Navbar = () => {
         </nav>
 
         <button onClick={handleLogout}>
-          <div className="flex text-white space-x-2 hover:bg-blue-800 px-6 py-4">
+          <div className="flex text-white space-x-2 hover:bg-white hover:text-red-500 px-6 py-2">
             <ArrowRightStartOnRectangleIcon className="h-6 w-6" />
             <span>Logout</span>
           </div>
