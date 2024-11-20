@@ -10,7 +10,6 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>) => {
     const router = useRouter();
 
     useEffect(() => {
-    //   const wallet = localStorage.getItem('wallet');
       const user = LocalStorage().getAttribute('user');
       if (!user) {
         router.push('/login'); // 用户未登录时跳转到登录页
