@@ -62,11 +62,11 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
         <h3 className="text-2xl font-semibold mb-8">Profile Information</h3>
         <div className="flex flex-col space-y-1 w-full">
           <div className="flex space-x-2 items-center">
-            <label className="font-bold">User_ID:</label>
+            <label className="font-bold w-20">User_ID:</label>
             <p className="px-2 py-1">{user.userID}</p>
           </div>
           <div className="flex space-x-2 items-center">
-            <label className="font-bold">Identity:</label>
+            <label className="font-bold w-20">Identity:</label>
             <p
               className={`mx-1 my-1 px-2 py-1 ${
                 isStudent ? "text-green-500" : "text-blue-500"
@@ -76,7 +76,7 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
             </p>
           </div>
           <div className="flex space-x-2 items-center">
-            <label className="font-bold">Wallet_ID:</label>
+            <label className="font-bold w-20">Wallet_ID:</label>
             <input
               type="text"
               className="w-full lg:w-1/2 px-2 py-1 border rounded-md text-gray-700"
@@ -90,7 +90,7 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
           <div>
             {user.address !== "" ? (
               <div className="flex space-x-2 items-center">
-                <h3 className="font-bold">Address:</h3>
+                <h3 className="font-bold w-20">Address:</h3>
 
                 <input
                   type="text"

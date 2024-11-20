@@ -16,7 +16,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ userInfo }) => {
         <input
           type="text"
           placeholder="Search Attendance"
-          className="w-full p-1 border-b-2 border-black mx-4 focus:outline-none focus:border-blue-500"
+          className="w-full p-1 border-b-2 text-black border-black mx-4 focus:outline-none focus:border-blue-500"
         />
 
         <div className="text-black rounded-lg">

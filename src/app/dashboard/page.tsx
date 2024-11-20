@@ -40,7 +40,6 @@ const page = () => {
       setLoading(false);
     } else {
       setLoading(false);
-      throw new Error(`Error: User Instance is not existing`);
     }
   }, []);
 
@@ -91,21 +90,53 @@ const page = () => {
         <Spinner size="h-20 w-20" color="text-white" strokeWidth={2} />
       </div>
     ); // Display loading indicator
-  }
-  return (
-    <div className="h-screen lg:flex bg-blue-600">
-      <Navbar />
-      <main className="overflow-y-auto w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
-        {user && <SearchBar userInfo={user} />}
-        {user && <Profile userInfo={user} />}
-        <div className="bg-white shadow-md rounded-lg p-6">
-          {true ? (
-            <>
-              <h3 className="text-2xl font-semibold mb-8">
-                Events participated
-              </h3>
-              <div className="overflow-x-auto">
-                <table className="min-w-full">
+  } else
+    return (
+      <div className="h-screen lg:flex bg-blue-600">
+        <Navbar />
+        <main className="overflow-y-auto w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
+          {user && <SearchBar userInfo={user} />}
+          {user && <Profile userInfo={user} />}
+          <div className="bg-white shadow-md rounded-lg p-6">
+            {true ? (
+              <>
+                <h3 className="text-2xl font-semibold mb-8">
+                  Events participated
+                </h3>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full">
+                    <thead>
+                      <tr>
+                        <th className="text-left p-2">Index</th>
+                        <th className="text-left p-2">Event ID</th>
+                        <th className="text-left p-2">Host ID</th>
+                        <th className="text-left p-2">Date</th>
+                        <th className="text-left p-2">Time</th>
+                        <th className="text-left p-2">Remark</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {dummyAttendance.map((attendance, index) => {
+                        const dateTime = formatDateTime(attendance.deadline);
+                        return (
+                          <tr className="border-t" key={index}>
+                            <td className="p-2">{index}</td>
+                            <td className="p-2">{attendance.eventId}</td>
+                            <td className="p-2">{attendance.hostId}</td>
+                            <td className="p-2">{dateTime.date}</td>
+                            <td className="p-2">{dateTime.time}</td>
+                            <td className="p-2">{attendance.remark}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="text-2xl font-semibold mb-8">Events Held</h3>
+                <table className="w-full">
                   <thead>
                     <tr>
                       <th className="text-left p-2">Index</th>
@@ -132,59 +163,27 @@ const page = () => {
                     })}
                   </tbody>
                 </table>
+              </>
+            )}
+            <div className="flex justify-between mt-4 text-sm">
+              <div>
+                Show{" "}
+                <select className="border rounded p-1">
+                  <option>10</option>
+                  <option>25</option>
+                </select>
               </div>
-            </>
-          ) : (
-            <>
-              <h3 className="text-2xl font-semibold mb-8">Events Held</h3>
-              <table className="w-full">
-                <thead>
-                  <tr>
-                    <th className="text-left p-2">Index</th>
-                    <th className="text-left p-2">Event ID</th>
-                    <th className="text-left p-2">Host ID</th>
-                    <th className="text-left p-2">Date</th>
-                    <th className="text-left p-2">Time</th>
-                    <th className="text-left p-2">Remark</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dummyAttendance.map((attendance, index) => {
-                    const dateTime = formatDateTime(attendance.deadline);
-                    return (
-                      <tr className="border-t" key={index}>
-                        <td className="p-2">{index}</td>
-                        <td className="p-2">{attendance.eventId}</td>
-                        <td className="p-2">{attendance.hostId}</td>
-                        <td className="p-2">{dateTime.date}</td>
-                        <td className="p-2">{dateTime.time}</td>
-                        <td className="p-2">{attendance.remark}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </>
-          )}
-          <div className="flex justify-between mt-4 text-sm">
-            <div>
-              Show{" "}
-              <select className="border rounded p-1">
-                <option>10</option>
-                <option>25</option>
-              </select>
-            </div>
-            <div>
-              {/* Pagination */}
-              <button className="p-1">&lt;</button>
-              <button className="p-1">1</button>
-              <button className="p-1">2</button>
-              <button className="p-1">&gt;</button>
+              <div>
+                {/* Pagination */}
+                <button className="p-1">&lt;</button>
+                <button className="p-1">1</button>
+                <button className="p-1">2</button>
+                <button className="p-1">&gt;</button>
+              </div>
             </div>
           </div>
-        </div>
-      </main>
-    </div>
-  );
+        </main>
+      </div>
+    );
 };
 export default WithAuth(page);
