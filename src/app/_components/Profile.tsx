@@ -77,14 +77,9 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
           </div>
           <div className="flex space-x-2 items-center">
             <label className="font-bold w-20">Wallet_ID:</label>
-            <input
-              type="text"
-              className="flex-grow lg:w-1/2 px-2 py-1 border rounded-md text-gray-700"
-              readOnly
-              value={user.walletId}
-            />
+            <p className="py-1">{user.walletId}</p>
             <button onClick={() => copyToClipboard(user.walletId)}>
-              <DocumentDuplicateIcon className="h-5 w-5 text-gray-500" />
+              <DocumentDuplicateIcon className="h-5 w-5 text-black hover:text-blue-500" />
             </button>
           </div>
 
@@ -92,15 +87,10 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
             <label className="font-bold w-20">Address:</label>
             {user.address !== "" ? (
               <>
-                <input
-                  type="text"
-                  className="w-full lg:w-1/2 px-2 py-1 border rounded-md text-gray-700"
-                  readOnly
-                  value={user.address}
-                />
+                 <p className="py-1">{user.address}</p>
 
                 <button onClick={() => copyToClipboard(user.address)}>
-                  <DocumentDuplicateIcon className="h-5 w-5 text-gray-500" />
+                <DocumentDuplicateIcon className="h-5 w-5 text-black hover:text-blue-500" />
                 </button>
               </>
             ) : (
