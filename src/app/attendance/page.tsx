@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { UserClass } from "../_modules/UserClass";
 import LocalStorage from "../_controllers/LocalStorage";
 import Spinner from "../_components/Spinner";
+import BlockchainInfo from '../_components/BlockchainInfo';
 
 const page = () => {
   const api = API();
@@ -82,6 +83,8 @@ const page = () => {
               </div>
             </div>
           </div>
+          
+          <BlockchainInfo />
         </main>
       </div>
     );
