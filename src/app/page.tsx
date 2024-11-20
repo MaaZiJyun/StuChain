@@ -43,24 +43,24 @@ export default function Home() {
 
   const features = [
     {
-      name: "MA ZHI YUAN",
-      info: "Alice has over 10 years of experience managing tech projects across various industries.",
+      name: "Attendance Record",
+      info: "Naivecoin Blockchain Based Student Attendance System",
     },
     {
-      name: "MA ZHI YUAN",
-      info: "Alice has over 10 years of experience managing tech projects across various industries.",
+      name: "Attendance Query",
+      info: "Convenient and Transparent Access to Attendance Records",
     },
     {
-      name: "MA ZHI YUAN",
-      info: "Alice has over 10 years of experience managing tech projects across various industries.",
+      name: "Block Creation",
+      info: "Hidden Extra Rewards?",
     },
     {
-      name: "MA ZHI YUAN",
-      info: "Alice has over 10 years of experience managing tech projects across various industries.",
+      name: "POW Algorithm",
+      info: "Dynamically Adjust Mining Difficulty to Balance Throughput.",
     },
     {
-      name: "MA ZHI YUAN",
-      info: "Alice has over 10 years of experience managing tech projects across various industries.",
+      name: "Longest Chain Selection",
+      info: "Perfect Solution for Conflicts",
     },
   ];
 

@@ -9,6 +9,7 @@ import { UserClass } from "../_modules/UserClass";
 import LocalStorage from "../_controllers/LocalStorage";
 import Spinner from "../_components/Spinner";
 import BlockchainInfo from '../_components/BlockchainInfo';
+import BlockFilter from '../_components/BlockFilter';
 
 const page = () => {
   const api = API();
@@ -40,6 +41,7 @@ const page = () => {
         <Navbar />
         <main className="overflow-y-auto w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
           {user && <SearchBar userInfo={user} />}
+          <BlockFilter />
           <div className="bg-white shadow-md rounded-lg p-6">
             <div className="overflow-x-auto">
               <table className="w-full">
