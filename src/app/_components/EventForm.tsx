@@ -18,6 +18,7 @@ const EventForm: React.FC<ventFormProps> = ({ userInfo }) => {
   const [remark, setRemark] = useState("");
   const [show, setShow] = useState("");
   const [display, setDisplay] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Handle change for each input field
   const handlePasswordChange = (e: any) => setAssignedPassword(e.target.value);
@@ -49,7 +50,8 @@ const EventForm: React.FC<ventFormProps> = ({ userInfo }) => {
         remark
       );
       if (data) {
-        setShow(data);
+        setSuccessMessage(`Successfully Create Event ${eventName}`);
+        setShow("");
         changeDisplay();
       }
     } else {
@@ -110,8 +112,21 @@ const EventForm: React.FC<ventFormProps> = ({ userInfo }) => {
 
   return (
     <>
-      {show ? (
-        <p>{JSON.stringify(show)}</p>
+      {successMessage ? (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+            <div className="text-center">
+              <p className="text-2xl text-blue-500 mb-4">{successMessage}</p>
+              <p className="text-gray-600 mb-6">Event will publish after mining</p>
+              <button
+                onClick={() => setSuccessMessage("")}
+                className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 text-lg w-full"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       ) : (
         <button
           className="flex w-full text-black justify-between items-center"
