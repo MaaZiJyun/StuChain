@@ -11,7 +11,7 @@ class DTFormator {
     try {
       
       if (timestamp.toString().length === 10) {
-        timestamp = timestamp * 1000;
+        timestamp > 1000000000000 ? timestamp : timestamp * 1000
       }
       const isoString = new Date(timestamp).toISOString();
       const formattedDateTime = DTFormator.formatDateTime(isoString);

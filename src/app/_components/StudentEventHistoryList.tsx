@@ -54,13 +54,29 @@ const StudentEventHistoryList: React.FC<StudentEventHistoryListProps> = ({
   ) => {
     const newList: EventClass[] = allOwnSignedEvents.filter((event) => {
       if (event.timestamp) {
-        const time = new Date(event.timestamp * 1000);
+        const time = new Date(
+          event.timestamp > 1000000000000 ? event.timestamp : event.timestamp * 1000
+        );
+
+        console.log("Event Timestamp:", time.toISOString());
+        console.log(
+          `Start Date: ${startDate?.toISOString()}, End Date: ${endDate?.toISOString()}`
+        );
+        const isAfterStart = startDate
+          ? time.getTime() >= startDate.getTime()
+          : true;
+        const isBeforeEnd = endDate
+          ? time.getTime() <= endDate.getTime()
+          : true;
+        console.log(
+          `Event ${event.eventId}: isAfterStart=${isAfterStart}, isBeforeEnd=${isBeforeEnd}`
+        );
 
         return (
           (eventId !== "" ? event.eventId.includes(eventId) : true) &&
           (studentId !== "" ? event.stuId.includes(studentId) : true) &&
-          (startDate ? time >= startDate : true) &&
-          (endDate ? time <= endDate : true)
+          isAfterStart &&
+          isBeforeEnd
         );
       }
       return false;
@@ -181,21 +197,6 @@ const StudentEventHistoryList: React.FC<StudentEventHistoryListProps> = ({
               className="w-full p-2 border rounded-md"
             />
           </div>
-        </div>
-
-        <div className="flex space-x-4">
-          <button
-            onClick={fetchAndFilterRecords}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-          >
-            Query Records
-          </button>
-          <button
-            onClick={resetFilters}
-            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
-          >
-            Reset Filters
-          </button>
         </div>
       </div>
 
