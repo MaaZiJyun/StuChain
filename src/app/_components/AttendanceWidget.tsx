@@ -3,12 +3,12 @@ import API from "../_controllers/api";
 import LocalStorage from "../_controllers/LocalStorage";
 import { UserClass } from "../_modules/UserClass";
 import QRCodeScanner from "./QRCodeScanner";
-import { TransactionClass } from "../_modules/TransactionClass";
 import {
   DocumentDuplicateIcon,
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
 import PasswordWidget from "./PasswordWidget";
+import { EventClass } from "../_modules/EventClass";
 
 const AttendanceWidget = () => {
   const local = LocalStorage();
@@ -20,7 +20,7 @@ const AttendanceWidget = () => {
   const [isStudent, setIsStudent] = useState(true);
   const [isOpenning, setIsOpenning] = useState(false);
   const [qrData, setQrData] = useState("");
-  const [transaction, setTransaction] = useState<TransactionClass>();
+  const [transaction, setTransaction] = useState<EventClass>();
 
   // Toggle scanning state
   const openWidget = () => {
@@ -43,7 +43,7 @@ const AttendanceWidget = () => {
   useEffect(() => {
     if (qrData) {
       console.log("QR assigned:", qrData);
-      const newTransaction = TransactionClass.fromJSON(qrData);
+      const newTransaction = EventClass.fromJSON(qrData);
       if (newTransaction) {
         setTransaction(newTransaction);
       }
@@ -77,8 +77,8 @@ const AttendanceWidget = () => {
 
   if (loading) {
     return (
-      <button className="flex items-center space-x-2 text-black border-2-solid rounded-lg">
-        <QrCodeIcon className="h-10 w-10 " />
+      <button className="flex items-center space-x-2 text-black rounded-lg">
+        <QrCodeIcon className="h-8 w-8 " />
       </button>
     ); // Display loading indicator
   }
@@ -87,9 +87,9 @@ const AttendanceWidget = () => {
     <>
       <button
         onClick={openWidget}
-        className="flex items-center space-x-2 text-black hover:text-blue-500 border-2-solid rounded-lg"
+        className="flex items-center space-x-2 text-black hover:text-blue-500 rounded-lg"
       >
-        <QrCodeIcon className="h-10 w-10"/>
+        <QrCodeIcon className="h-8 w-8"/>
       </button>
 
       {isOpenning && (

@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 import { UserClass } from "../_modules/UserClass";
 import LocalStorage from "../_controllers/LocalStorage";
 import Spinner from "../_components/Spinner";
-import BlockFilter from '../_components/BlockFilter';
+import BlockFilter from "../_components/BlockFilter";
+import StudentEventList from "../_components/StudentEventList";
 
 const page = () => {
   const api = API();
@@ -36,10 +37,11 @@ const page = () => {
   } else
     return (
       <div className="h-screen lg:flex bg-blue-600">
-        <Navbar />
+        {user && <Navbar userInfo={user} />}
         <main className="overflow-y-auto w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
           {user && <SearchBar userInfo={user} />}
           <BlockFilter />
+          {user && <StudentEventList userInfo={user} />}
         </main>
       </div>
     );

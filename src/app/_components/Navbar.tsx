@@ -1,14 +1,23 @@
+"use client";
 import {
   AdjustmentsHorizontalIcon,
   ArrowRightStartOnRectangleIcon,
   ClipboardIcon,
   CubeIcon,
+  MegaphoneIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import API from "../_controllers/api";
+import { UserClass } from "../_modules/UserClass";
 
-const Navbar = () => {
+interface NavbarProps {
+  userInfo: UserClass;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ userInfo }) => {
+  const [user, setUser] = useState<UserClass>(userInfo);
+  const isStudent = user.userID.startsWith("S");
   function handleLogout(e: any): void {
     API().removeAuth();
     window.location.reload();
@@ -29,22 +38,26 @@ const Navbar = () => {
                 </div>
               </Link>
             </li>
-            <li className="">
-              <Link href="/events">
-                <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
-                  <ClipboardIcon className="h-6 w-6" />
-                  <span>Events</span>
-                </div>
-              </Link>
-            </li>
-            <li className="">
-              <Link href="/attendance">
-                <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
-                  <ClipboardIcon className="h-6 w-6" />
-                  <span>Attendance</span>
-                </div>
-              </Link>
-            </li>
+            {isStudent ? (
+              <li className="">
+                <Link href="/attendance">
+                  <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
+                    <ClipboardIcon className="h-6 w-6" />
+                    <span>Attendance</span>
+                  </div>
+                </Link>
+              </li>
+            ) : (
+              <li className="">
+                <Link href="/events">
+                  <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
+                    <MegaphoneIcon className="h-6 w-6" />
+                    <span>Events</span>
+                  </div>
+                </Link>
+              </li>
+            )}
+
             <li className="">
               <Link href="/mining">
                 <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
@@ -74,11 +87,19 @@ const Navbar = () => {
             </div>
           </Link>
 
-          <Link href="/attendance">
-            <div className="flex text-white space-x-2 hover:bg-blue-800 px-3 py-2">
-              <ClipboardIcon className="h-6 w-6" />
-            </div>
-          </Link>
+          {isStudent ? (
+            <Link href="/attendance">
+              <div className="flex text-white space-x-2 hover:bg-blue-800 px-3 py-2">
+                <ClipboardIcon className="h-6 w-6" />
+              </div>
+            </Link>
+          ) : (
+            <Link href="/events">
+              <div className="flex text-white space-x-2 hover:bg-blue-800 px-3 py-2">
+                <MegaphoneIcon className="h-6 w-6" />
+              </div>
+            </Link>
+          )}
 
           <Link href="/mining">
             <div className="flex text-white space-x-2 hover:bg-blue-800 px-3 py-2">

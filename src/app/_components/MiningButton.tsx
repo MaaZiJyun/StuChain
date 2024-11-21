@@ -46,7 +46,7 @@ const MiningButton = () => {
   };
 
   return (
-    <div className="bg-white text-black shadow-md rounded-lg mb-6">
+    <div className="bg-white text-black rounded-lg mb-6">
       <button
         onClick={handleMining}
         disabled={loading}
@@ -60,12 +60,12 @@ const MiningButton = () => {
         <div className="flex items-center justify-between">
           {loading ? (
             <>
-              <Spinner size="h-5 w-5" color="text-white" strokeWidth={2} />
+              <Spinner size="h-5 w-5 mr-2" color="text-white" strokeWidth={2} />
               <span>Mining...</span>
             </>
           ) : (
             <>
-              <WrenchIcon className="h-5 w-5" />
+              <WrenchIcon className="h-5 w-5 mr-2" />
               <span>Start Mining</span>
             </>
           )}

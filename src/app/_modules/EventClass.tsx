@@ -1,49 +1,63 @@
-// Define the EventClass
-class EventClass {
+export class EventClass {
+  fromAddress: string;
+  toAddress: string;
+  amount: number; // Use `string` or `number` based on your requirements
+  changeAddress: string;
+  stuId: string;
+  teacherId: string;
+  deadline: string;
+  remark: string; // Nullable field
   eventId: string;
-  hostId: string;
-  date: string;
-  time: string;
-  remark: string;
 
   constructor(
+    fromAddress: string,
+    toAddress: string,
+    amount: number,
+    changeAddress: string,
+    stuId: string,
+    teacherId: string,
     eventId: string,
-    hostId: string,
-    date: string,
-    time: string,
-    remark: string
+    deadline: string,
+    remark: string // Optional parameter
   ) {
+    this.fromAddress = fromAddress;
+    this.toAddress = toAddress;
+    this.amount = amount;
+    this.changeAddress = changeAddress;
+    this.stuId = stuId;
+    this.teacherId = teacherId;
     this.eventId = eventId;
-    this.hostId = hostId;
-    this.date = date;
-    this.time = time;
-    this.remark = remark;
+    this.deadline = deadline;
+    this.remark = remark || "";
   }
 
-  // Method to convert class instance to JSON
-  toJSON(): string {
-    return JSON.stringify({
+  // Convert an instance of EventClass to a JSON object
+  toJSON(): object {
+    return {
+      fromAddress: this.fromAddress,
+      toAddress: this.toAddress,
+      amount: this.amount,
+      changeAddress: this.changeAddress,
+      stuId: this.stuId,
+      teacherId: this.teacherId,
       eventId: this.eventId,
-      hostId: this.hostId,
-      date: this.date,
-      time: this.time,
+      deadline: this.deadline,
       remark: this.remark,
-    });
+    };
   }
 
-  // Static method to create an instance from a Transaction JSON
-  static fromJSON(jsonString: string): EventClass {
-    const data = JSON.parse(jsonString);
-
-    // Assuming the Transaction JSON has a deadline field in 'YYYY-MM-DDTHH:MM:SS' format
-    const [date, time] = data.deadline.split("T");
-
+  // Create an instance of EventClass from a JSON object
+  static fromJSON(json: any): EventClass {
     return new EventClass(
-      data.eventId, // Mapping eventId directly
-      data.teacherId, // Assuming teacherId corresponds to hostId
-      date, // Extracted date part from deadline
-      time, // Extracted time part from deadline
-      data.remark // Mapping remark directly
+      json.fromAddress,
+      json.toAddress,
+      json.amount,
+      json.changeAddress,
+      json.stuId,
+      json.teacherId,
+      json.eventId,
+      json.deadline,
+      json.remark
     );
   }
 }
