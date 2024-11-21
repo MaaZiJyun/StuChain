@@ -148,7 +148,7 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
   const signAttendance = async (event: EventClass, password: string) => {
     const deadline = new Date().toISOString().slice(0, 16);
     const remark = `Signed by ${user.userID}`;
-    
+
     try {
       const signedEvent = new EventClass(
         user.address,
@@ -161,7 +161,7 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
         deadline,
         remark
       );
-      
+
       await executeSignTransaction(user.walletId, password, signedEvent);
       fetchTransactionList(); // 刷新列表
     } catch (err) {
@@ -231,7 +231,7 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
             </tr>
           </thead>
           <tbody className="w-full bg-white divide-y divide-gray-200">
-            {filtedEvents.map((ev: EventClass, index) => {
+            {allEvents.map((ev: EventClass, index) => {
               const isSigned = signedEvents.has(ev); // 判断是否已签到
               return (
                 <tr key={index}>
@@ -242,82 +242,22 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     {ev.teacherId}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{ev.deadline}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {DTFormator.formatTimestamp(Number(ev.deadline)).toString()}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {ev.remark || "No remark"}
                   </td>
 
-<<<<<<< Updated upstream
-          <table className="w-full">
-            <thead className="w-full bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Index
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-                  Event Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-                  Teacher ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-                  Deadline
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-                  Remark
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody className="w-full bg-white divide-y divide-gray-200">
-              {allEvents.map((ev: EventClass, index) => {
-                const isSigned = signedEvents.has(ev); // 判断是否已签到
-                return (
-                  <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap">{index}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {ev.eventId.replace("-create", "")}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {ev.teacherId}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {DTFormator.formatTimestamp(Number(ev.deadline)).toString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {ev.remark || "No remark"}
-                    </td>
-
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {!isSigned && (
-                        <PasswordWidget
-                          buttonText="Sign"
-                          buttonClass="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
-                          onSubmit={(password) => {
-                            signAttendance(ev, password);
-                          }}
-                        />
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-=======
                   <td className="px-6 py-4 whitespace-nowrap">
                     {!isSigned && (
-                      <button
-                        className="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
-                        onClick={() => {
-                          signAttendance(ev);
+                      <PasswordWidget
+                        buttonText="Sign"
+                        buttonClass="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+                        onSubmit={(password) => {
+                          signAttendance(ev, password);
                         }}
-                      >
-                        Sign
-                      </button>
+                      />
                     )}
                   </td>
                 </tr>
@@ -325,7 +265,6 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
             })}
           </tbody>
         </table>
->>>>>>> Stashed changes
       </div>
     </div>
   );
