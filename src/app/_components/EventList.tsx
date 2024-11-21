@@ -13,11 +13,13 @@ const EventList: React.FC<EventListProps> = ({ userInfo }) => {
   const [isStudent, setIsStudent] = useState<boolean>(true);
   const [password, setPassword] = useState("");
 
-  const filteredEvents: EventClass[] = [];
+  const signedEvents: Set<EventClass> = new Set();
+  const unSignedEvents: Set<EventClass> = new Set();
 
   // Use the corrected useState hook
   const [attendanceList, setAttendanceList] = useState<EventClass[]>([]);
-  const [signedEvents, setSignedEvents] = useState(new Set());
+  const [allEvents, setAllEvents] = useState<EventClass[]>([]);
+
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -45,15 +47,12 @@ const EventList: React.FC<EventListProps> = ({ userInfo }) => {
       const blocks = await response.json();
 
       // Filter attendance data
-      const signedEventsSet = new Set();
+      const allEventsSet = new Set<EventClass>();
 
       blocks.forEach((block: any) => {
         block.transactions.forEach((ev: any) => {
           // Collect signed event IDs
           const stuId = user.userID;
-          if (ev.stuId === stuId && ev.eventId) {
-            signedEventsSet.add(ev.eventId);
-          }
 
           // Collect all "-create" events
           if (ev.eventId && ev.eventId.endsWith("-create")) {
@@ -76,13 +75,29 @@ const EventList: React.FC<EventListProps> = ({ userInfo }) => {
               deadline,
               remark
             );
-            filteredEvents.push(receivedEvent);
+            allEventsSet.add(receivedEvent);
           }
         });
       });
-      console.log(filteredEvents);
-      setAttendanceList(filteredEvents);
-      setSignedEvents(signedEventsSet);
+
+      allEventsSet.forEach((ev: EventClass) => {
+        if (ev.stuId) {
+          if (ev.stuId === user.userID) {
+            signedEvents.add(ev);
+          } else {
+            allEventsSet.delete(ev);
+          }
+        } else {
+          unSignedEvents.add(ev);
+        }
+      });
+
+      console.log(allEventsSet);
+      const all: EventClass[] = [];
+      allEventsSet.forEach((ev: EventClass) => {
+        all.push(ev);
+      });
+      setAllEvents(all);
       setError(null); // Clear any previous errors
     } catch (err) {
       console.error("Error fetching attendance:", err);
@@ -152,68 +167,72 @@ const EventList: React.FC<EventListProps> = ({ userInfo }) => {
   }, []);
 
   return (
-    <div className="container mx-auto mt-4">
-      {error && <p className="text-red-500">Error: {error}</p>}
+    <div className="mb-6">
+      <div className="flex justify-center items-center ">
+        <div className="container mx-auto mt-4">
+          {error && <p className="text-red-500">Error: {error}</p>}
 
-      <table className="w-full">
-        <thead className="w-full bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              Index
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-              Event Name
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-              Teacher ID
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-              Deadline
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-              Remark
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody className="w-full bg-white divide-y divide-gray-200">
-          {attendanceList.map((attendance: EventClass, index) => {
-            const isSigned = signedEvents.has(attendance.eventId); // 判断是否已签到
-            return (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap">{index}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {attendance.eventId.replace("-create", "")}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {attendance.teacherId}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {attendance.deadline}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {attendance.remark || "No remark"}
-                </td>
-
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {!isSigned && (
-                    <button
-                      className="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
-                      onClick={() => {
-                        signAttendance(attendance);
-                      }}
-                    >
-                      Sign
-                    </button>
-                  )}
-                </td>
+          <table className="w-full">
+            <thead className="w-full bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  Index
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                  Event Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                  Teacher ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                  Deadline
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                  Remark
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                  Action
+                </th>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            </thead>
+            <tbody className="w-full bg-white divide-y divide-gray-200">
+              {allEvents.map((ev: EventClass, index) => {
+                const isSigned = signedEvents.has(ev); // 判断是否已签到
+                return (
+                  <tr key={index}>
+                    <td className="px-6 py-4 whitespace-nowrap">{index}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {ev.eventId.replace("-create", "")}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {ev.teacherId}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {ev.deadline}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {ev.remark || "No remark"}
+                    </td>
+
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {!isSigned && (
+                        <button
+                          className="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+                          onClick={() => {
+                            signAttendance(ev);
+                          }}
+                        >
+                          Sign
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
