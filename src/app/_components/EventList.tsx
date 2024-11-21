@@ -217,7 +217,7 @@ const EventList: React.FC<EventListProps> = ({ userInfo }) => {
 
                     <td className="px-6 py-4 whitespace-nowrap">
                       <QRCodeGenerator
-                        buttonClass={""}
+                        buttonClass={"text-black hover:text-blue-500"}
                         qrCodeData={JSON.stringify(ev.toJSON())}
                       />{" "}
                     </td>
