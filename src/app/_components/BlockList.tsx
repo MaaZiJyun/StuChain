@@ -133,7 +133,7 @@ const BlockList: React.FC<BlockListProp> = ({ blocks }) => {
                   Next
                 </button>
               ) : (
-                <button className="mx-1 px-2 py-1 text-gray-500">Prev</button>
+                <button className="mx-1 px-2 py-1 text-gray-500">Next</button>
               )}
             </div>
           </div>
