@@ -1,5 +1,7 @@
 import { EventClass } from "../_modules/EventClass";
 import { UserClass } from "../_modules/UserClass";
+import PasswordWidget from "./PasswordWidget";
+import DTFormator from "../_controllers/DateTimeFormator";
 
 interface StudentEventListProps {
   userInfo: UserClass;
@@ -12,6 +14,7 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isStudent, setIsStudent] = useState<boolean>(true);
   const [password, setPassword] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState<EventClass | null>(null);
 
   const signedEvents: Set<EventClass> = new Set();
   const unSignedEvents: Set<EventClass> = new Set();
@@ -105,12 +108,11 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
   };
 
   // Sign attendance function
-  const signAttendance = async (event: EventClass) => {
-    const deadline = new Date().toISOString().slice(0, 16); // Current time
+  const signAttendance = async (event: EventClass, password: string) => {
+    const deadline = new Date().toISOString().slice(0, 16);
     const remark = `Signed by ${user.userID}`;
-    console.log(JSON.stringify("before signAttendance: " + event.toJSON()));
+    
     try {
-      // Execute sign transaction
       const signedEvent = new EventClass(
         user.address,
         event.fromAddress,
@@ -122,12 +124,9 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
         deadline,
         remark
       );
+      
       await executeSignTransaction(user.walletId, password, signedEvent);
-
-      console.log(JSON.stringify("signAttendance: " + signedEvent.toJSON()));
-
-      // Refresh the attendance list
-      fetchTransactionList();
+      fetchTransactionList(); // 刷新列表
     } catch (err) {
       console.error("Error during sign-in:", err);
       alert(`Sign-in Failed: ${err || "Unknown error"}`);
@@ -208,7 +207,7 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
                       {ev.teacherId}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {ev.deadline}
+                      {DTFormator.formatTimestamp(Number(ev.deadline)).toString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {ev.remark || "No remark"}
@@ -216,14 +215,13 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
 
                     <td className="px-6 py-4 whitespace-nowrap">
                       {!isSigned && (
-                        <button
-                          className="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
-                          onClick={() => {
-                            signAttendance(ev);
+                        <PasswordWidget
+                          buttonText="Sign"
+                          buttonClass="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+                          onSubmit={(password) => {
+                            signAttendance(ev, password);
                           }}
-                        >
-                          Sign
-                        </button>
+                        />
                       )}
                     </td>
                   </tr>

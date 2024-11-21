@@ -5,6 +5,7 @@ import {
   ClipboardIcon,
   CubeIcon,
   MegaphoneIcon,
+  MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -48,14 +49,24 @@ const Navbar: React.FC<NavbarProps> = ({ userInfo }) => {
                 </Link>
               </li>
             ) : (
-              <li className="">
-                <Link href="/events">
-                  <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
-                    <MegaphoneIcon className="h-6 w-6" />
-                    <span>Events</span>
-                  </div>
-                </Link>
-              </li>
+              <>
+                <li className="">
+                  <Link href="/events">
+                    <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
+                      <MegaphoneIcon className="h-6 w-6" />
+                      <span>Events</span>
+                    </div>
+                  </Link>
+                </li>
+                <li className="">
+                  <Link href="/query">
+                    <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
+                      <MagnifyingGlassIcon className="h-6 w-6" />
+                      <span>Query Records</span>
+                    </div>
+                  </Link>
+                </li>
+              </>
             )}
 
             <li className="">
@@ -94,11 +105,18 @@ const Navbar: React.FC<NavbarProps> = ({ userInfo }) => {
               </div>
             </Link>
           ) : (
-            <Link href="/events">
-              <div className="flex text-white space-x-2 hover:bg-blue-800 px-3 py-2">
-                <MegaphoneIcon className="h-6 w-6" />
-              </div>
-            </Link>
+            <>
+              <Link href="/events">
+                <div className="flex text-white space-x-2 hover:bg-blue-800 px-3 py-2">
+                  <MegaphoneIcon className="h-6 w-6" />
+                </div>
+              </Link>
+              <Link href="/query">
+                <div className="flex text-white space-x-2 hover:bg-blue-800 px-3 py-2">
+                  <MagnifyingGlassIcon className="h-6 w-6" />
+                </div>
+              </Link>
+            </>
           )}
 
           <Link href="/mining">
