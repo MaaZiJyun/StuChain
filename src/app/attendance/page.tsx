@@ -1,5 +1,4 @@
 "use client";
-import Head from "next/head";
 import API from "../_controllers/api";
 import WithAuth from "../_components/WithAuth";
 import Navbar from "../_components/Navbar";
@@ -8,7 +7,6 @@ import { useEffect, useState } from "react";
 import { UserClass } from "../_modules/UserClass";
 import LocalStorage from "../_controllers/LocalStorage";
 import Spinner from "../_components/Spinner";
-import BlockchainInfo from '../_components/BlockchainInfo';
 import BlockFilter from '../_components/BlockFilter';
 
 const page = () => {

@@ -30,6 +30,14 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="">
+              <Link href="/events">
+                <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
+                  <ClipboardIcon className="h-6 w-6" />
+                  <span>Events</span>
+                </div>
+              </Link>
+            </li>
+            <li className="">
               <Link href="/attendance">
                 <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
                   <ClipboardIcon className="h-6 w-6" />
