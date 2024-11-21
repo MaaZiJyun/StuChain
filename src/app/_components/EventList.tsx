@@ -6,6 +6,7 @@ interface EventListProps {
 }
 
 import { useEffect, useState } from "react";
+import QRCodeGenerator from "./QRCodeGenerator";
 
 const EventList: React.FC<EventListProps> = ({ userInfo }) => {
   const [user, setUser] = useState<UserClass>(userInfo);
@@ -215,16 +216,10 @@ const EventList: React.FC<EventListProps> = ({ userInfo }) => {
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {!isSigned && (
-                        <button
-                          className="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
-                          onClick={() => {
-                            signAttendance(ev);
-                          }}
-                        >
-                          Sign
-                        </button>
-                      )}
+                      <QRCodeGenerator
+                        buttonClass={""}
+                        qrCodeData={JSON.stringify(ev.toJSON())}
+                      />{" "}
                     </td>
                   </tr>
                 );
