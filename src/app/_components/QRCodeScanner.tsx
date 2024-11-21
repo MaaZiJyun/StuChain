@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
-import { TransactionClass } from "../_modules/TransactionClass";
 import { ViewfinderCircleIcon } from "@heroicons/react/24/outline";
 
 interface ScanWidgetProps {

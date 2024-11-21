@@ -5,9 +5,10 @@ export class EventClass {
   changeAddress: string;
   stuId: string;
   teacherId: string;
+  eventId: string;
   deadline: string;
   remark: string; // Nullable field
-  eventId: string;
+  timestamp?: number;
 
   constructor(
     fromAddress: string,
@@ -18,7 +19,8 @@ export class EventClass {
     teacherId: string,
     eventId: string,
     deadline: string,
-    remark: string // Optional parameter
+    remark: string, // Optional parameter
+    timestamp?: number
   ) {
     this.fromAddress = fromAddress;
     this.toAddress = toAddress;
@@ -29,6 +31,7 @@ export class EventClass {
     this.eventId = eventId;
     this.deadline = deadline;
     this.remark = remark || "";
+    this.timestamp = timestamp || 0;
   }
 
   // Convert an instance of EventClass to a JSON object
@@ -57,7 +60,8 @@ export class EventClass {
       json.teacherId,
       json.eventId,
       json.deadline,
-      json.remark
+      json.remark,
+      json.timestamp
     );
   }
 }

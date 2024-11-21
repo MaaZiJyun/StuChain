@@ -42,7 +42,7 @@ export class UserClass {
   static fromStorage(jsonString: string): UserClass | null {
     try {
       const data = JSON.parse(jsonString);
-      // console.log(data);
+      console.log(data);
       const user = new UserClass(data.walletId, data.userID, data.address);
       // console.log(user);
       return user;

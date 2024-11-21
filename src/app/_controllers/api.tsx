@@ -1,3 +1,4 @@
+import { EventClass } from "../_modules/EventClass";
 import { UserClass } from "../_modules/UserClass";
 const API = () => {
   const ROOT = "http://localhost:3001";
@@ -132,15 +133,144 @@ const API = () => {
       throw err; // Throw the error for further handling
     }
   };
+
+  const signAttendance = async (
+    user: UserClass,
+    event: EventClass,
+    password: string
+  ) => {
+    const deadline = new Date().toISOString().slice(0, 16);
+    const remark = `Signed by ${user.userID}`;
+
+    try {
+      const signedEvent = new EventClass(
+        user.address,
+        event.fromAddress,
+        0,
+        user.address,
+        user.userID,
+        event.teacherId,
+        event.eventId.replace("-create", ""),
+        event.deadline,
+        remark
+      );
+
+      const ddl = new Date(event.deadline);
+      const now = new Date();
+      const isExpired = ddl.getTime() < now.getTime();
+
+      if (isExpired) {
+        throw new Error(
+          `Attendance expired: ${ddl.toUTCString()} < ${now.toUTCString()}`
+        );
+      }
+
+      const response = await fetch(
+        `${ROOT + OPERATOR_WALLETS}/${user.walletId}/transactions`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            password, // Include password in headers
+          },
+          body: JSON.stringify(signedEvent.toJSON()),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Error: ${response.status} - ${errorData.message}`);
+      }
+
+      console.log(response);
+
+      return response.json();
+    } catch (err) {
+      console.error("Error during sign-in:", err);
+      throw err;
+    }
+  };
+
+  // Fetch attendance list
+  const fetchTransactionList = async (
+    user: UserClass
+  ): Promise<EventClass[]> => {
+    const all: EventClass[] = [];
+    try {
+      // Fetch blockchain data
+      const response = await fetch("http://localhost:3001/blockchain/blocks", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch attendance records: ${response.statusText}`
+        );
+      }
+
+      const blocks = await response.json();
+
+      console.log("blocks:" + JSON.stringify(blocks));
+
+      // Filter attendance data
+      const allEventsSet = new Set<EventClass>();
+
+      blocks.forEach((block: any) => {
+        block.transactions.forEach((ev: any) => {
+          // Collect signed event IDs
+
+          // Collect all "-create" events
+          if (ev.eventId) {
+            const fromAddress = ev.data.outputs[0]?.address || "";
+            const toAddress = ev.data.outputs[1]?.address || "";
+            const amount = 0;
+            const changeAddress = ev.data.outputs[0]?.address || "";
+            const teacherId = ev.teacherId;
+            const stuId = ev.stuId;
+            const deadline = ev.deadline;
+            const remark = ev.remark || "";
+            const eventId = ev.eventId;
+            const ts = ev.timestamp || "Not avalible";
+            const receivedEvent = new EventClass(
+              fromAddress,
+              toAddress,
+              amount,
+              changeAddress,
+              stuId,
+              teacherId,
+              eventId,
+              deadline,
+              remark,
+              ts
+            );
+            allEventsSet.add(receivedEvent);
+          }
+        });
+      });
+
+      allEventsSet.forEach((ev: EventClass) => {
+        all.push(ev);
+      });
+    } catch (err) {
+      console.error("Error fetching attendance:", err);
+    }
+    return all;
+  };
+
   // Return an object exposing the API functions
   return {
     // getAllWallets,
     createAWallet,
-    // isUserIDDuplicate,
+    fetchTransactionList,
     verificationAuth,
     removeAuth,
     fetchWalletByID,
     createAnAddress,
+    signAttendance,
   };
 };
 

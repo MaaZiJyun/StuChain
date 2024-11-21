@@ -40,6 +40,7 @@ const page = () => {
         {user && <Navbar userInfo={user} />}
         <main className="overflow-y-auto w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
           {user && <StudentEventList userInfo={user} />}
+          {/* {user && <StudentEventList userInfo={user} />} */}
         </main>
       </div>
     );

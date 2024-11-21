@@ -8,12 +8,17 @@ class DTFormator {
   }
 
   static formatTimestamp(timestamp: number): DTFormator {
-    if (timestamp.toString().length === 10) {
-      timestamp = timestamp * 1000;
+    try {
+      
+      if (timestamp.toString().length === 10) {
+        timestamp = timestamp * 1000;
+      }
+      const isoString = new Date(timestamp).toISOString();
+      const formattedDateTime = DTFormator.formatDateTime(isoString);
+      return new DTFormator(formattedDateTime.date, formattedDateTime.time);
+    } catch (error) {
+     return  new DTFormator("", "");
     }
-    const isoString = new Date(timestamp).toISOString();
-    const formattedDateTime = DTFormator.formatDateTime(isoString);
-    return new DTFormator(formattedDateTime.date, formattedDateTime.time);
   }
 
   toString(): string {

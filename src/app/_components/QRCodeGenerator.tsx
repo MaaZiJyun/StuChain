@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import { QrCodeIcon } from "@heroicons/react/24/outline";
+import RealTimeClock from "./RealTimeClock";
 
 interface QRCodeWidgetProps {
   buttonClass: string;
@@ -50,6 +51,7 @@ const QRCodeGenerator: React.FC<QRCodeWidgetProps> = ({
                   Scan the QR Code for taking Attendance
                 </h2>
                 <img src={qrCodeUrl} alt="QR Code" className="w-full h-full" />
+                <RealTimeClock />
               </div>
             )}
             <div className="flex justify-end">

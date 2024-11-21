@@ -73,6 +73,10 @@ const EventForm: React.FC<ventFormProps> = ({ userInfo }) => {
     const stuId = "";
     const amount = 0;
     const changeAddress = user?.address;
+
+    const now = new Date(); // 当前时间
+    now.setMinutes(now.getMinutes() + 30);
+
     const newEvent = new EventClass(
       fromAddress,
       toAddress,
@@ -81,7 +85,7 @@ const EventForm: React.FC<ventFormProps> = ({ userInfo }) => {
       stuId,
       teacherId,
       eventId + "-create",
-      deadline,
+      deadline === "" ? now.toUTCString() : deadline,
       remark
     );
 
@@ -116,11 +120,11 @@ const EventForm: React.FC<ventFormProps> = ({ userInfo }) => {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50">
           <div className="bg-white p-8 rounded-lg shadow-lg w-96">
             <div className="text-center">
-              <p className="text-2xl text-blue-500 mb-4">{successMessage}</p>
-              <p className="text-gray-600 mb-6">Event will publish after mining</p>
+              <p className="text-lg text-blue-500 mb-4">{successMessage}</p>
+              <p className="text-sm text-gray-600 mb-6">Event will be published after mining process</p>
               <button
                 onClick={() => setSuccessMessage("")}
-                className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 text-lg w-full"
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-base w-full"
               >
                 Close
               </button>
@@ -132,7 +136,7 @@ const EventForm: React.FC<ventFormProps> = ({ userInfo }) => {
           className="flex w-full text-black justify-between items-center"
           onClick={changeDisplay}
         >
-          <h1 className="text-2xl font-bold">Events</h1>
+          <h1 className="text-2xl font-bold">Created Events</h1>
           <div className="flex hover:text-blue-500">
             <PlusIcon className="h-6 w-6 mr-2" />
             <span>Create a new Event</span>
@@ -164,7 +168,6 @@ const EventForm: React.FC<ventFormProps> = ({ userInfo }) => {
                   type="datetime-local"
                   id="deadline"
                   name="deadline"
-                  required
                   value={deadline}
                   onChange={handleDeadlineChange}
                   className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

@@ -6,6 +6,7 @@ import {
   CubeIcon,
   MegaphoneIcon,
   MagnifyingGlassIcon,
+  ClockIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -40,14 +41,24 @@ const Navbar: React.FC<NavbarProps> = ({ userInfo }) => {
               </Link>
             </li>
             {isStudent ? (
-              <li className="">
-                <Link href="/attendance">
-                  <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
-                    <ClipboardIcon className="h-6 w-6" />
-                    <span>Attendance</span>
-                  </div>
-                </Link>
-              </li>
+              <>
+                <li className="">
+                  <Link href="/attendance">
+                    <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
+                      <ClipboardIcon className="h-6 w-6" />
+                      <span>Attendance</span>
+                    </div>
+                  </Link>
+                </li>
+                <li className="">
+                  <Link href="/history">
+                    <div className="flex text-white space-x-2 hover:bg-white hover:text-blue-500 px-6 py-2">
+                      <ClockIcon className="h-6 w-6" />
+                      <span>History</span>
+                    </div>
+                  </Link>
+                </li>
+              </>
             ) : (
               <>
                 <li className="">
@@ -99,11 +110,16 @@ const Navbar: React.FC<NavbarProps> = ({ userInfo }) => {
           </Link>
 
           {isStudent ? (
-            <Link href="/attendance">
+            <><Link href="/attendance">
+            <div className="flex text-white space-x-2 hover:bg-blue-800 px-3 py-2">
+              <ClipboardIcon className="h-6 w-6" />
+            </div>
+          </Link><Link href="/history">
               <div className="flex text-white space-x-2 hover:bg-blue-800 px-3 py-2">
-                <ClipboardIcon className="h-6 w-6" />
+                <ClockIcon className="h-6 w-6" />
               </div>
-            </Link>
+            </Link></>
+            
           ) : (
             <>
               <Link href="/events">

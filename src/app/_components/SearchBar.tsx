@@ -72,13 +72,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ userInfo, onSubmit }) => {
   return (
     <div className="mb-6">
       <div className="flex justify-center items-center bg-white p-4 rounded-lg shadow-md">
-        {isStudent && <AttendanceWidget />}
+        {isStudent && <AttendanceWidget userInfo={user} />}
         <input
           type="text"
           placeholder="Event ID"
           value={eventId}
           onChange={handleEventIdChange}
-          className="w-full p-1 border-b-2 text-black border-black mx-2 focus:outline-none focus:border-blue-500"
+          className="w-full p-1 border rounded-md m-2"
         />
 
         {isStudent ? (
@@ -87,7 +87,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ userInfo, onSubmit }) => {
             placeholder="Lecturer ID"
             value={lecturerId}
             onChange={handleLecturerIdChange}
-            className="w-full p-1 border-b-2 text-black border-black mx-2 focus:outline-none focus:border-blue-500"
+            className="w-full p-1 border rounded-md m-2"
           />
         ) : (
           <input
@@ -95,7 +95,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ userInfo, onSubmit }) => {
             placeholder="Student ID"
             value={studentId}
             onChange={handleStudentIdChange}
-            className="w-full p-1 border-b-2 text-black border-black mx-2 focus:outline-none focus:border-blue-500"
+            className="w-full p-1 border rounded-md m-2"
           />
         )}
 
@@ -103,7 +103,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ userInfo, onSubmit }) => {
           type="date"
           value={dateTime}
           onChange={handleDateTimeChange}
-          className="w-full p-1 border-b-2 text-black border-black mx-2 focus:outline-none focus:border-blue-500"
+          className="w-full p-1 border rounded-md m-2"
         />
 
         <div className="flex space-x-2">

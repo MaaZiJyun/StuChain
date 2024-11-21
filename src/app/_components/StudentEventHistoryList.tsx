@@ -3,7 +3,7 @@ import { UserClass } from "../_modules/UserClass";
 import PasswordWidget from "./PasswordWidget";
 import DTFormator from "../_controllers/DateTimeFormator";
 
-interface StudentEventListProps {
+interface StudentEventHistoryListProps {
   userInfo: UserClass;
 }
 
@@ -12,7 +12,9 @@ import SearchBar from "./SearchBar";
 import LocalStorage from "../_controllers/LocalStorage";
 import API from "../_controllers/api";
 
-const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
+const StudentEventHistoryList: React.FC<StudentEventHistoryListProps> = ({
+  userInfo,
+}) => {
   const [user, setUser] = useState<UserClass>(userInfo);
   const [loading, setLoading] = useState<boolean>(true);
   const [isStudent, setIsStudent] = useState<boolean>(true);
@@ -20,8 +22,8 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
   const signedEvents: Set<EventClass> = new Set();
   const unSignedEvents: Set<EventClass> = new Set();
   const [filtedEvents, setFiltedEvents] = useState<EventClass[]>([]);
-  const [allEvents, setAllEvents] = useState<EventClass[]>([]);
-  const [allCreatedEvents, setAllCreatedEvents] = useState<EventClass[]>([]);
+  // const [allEvents, setAllEvents] = useState<EventClass[]>([]);
+  const [allSignedEvents, setAllSignedEvents] = useState<EventClass[]>([]);
 
   const [eventId, setEventId] = useState<string>("");
   const [studentId, setStudentId] = useState<string>("");
@@ -39,17 +41,6 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
     filter(eventId, studentId, lecturerId, dateTime);
   }, [eventId, studentId, lecturerId, dateTime]);
 
-  const isEventSigned = (event: EventClass, events: EventClass[]): boolean => {
-    const signedEventsIds: Set<string> = new Set();
-    events.forEach((ev) => {
-      if (ev.stuId !== "" && ev.stuId === user.userID) {
-        signedEventsIds.add(ev.eventId);
-      }
-    });
-    const result = signedEventsIds.has(event.eventId);
-    return result;
-  };
-
   const handleCon = (con: string) => {
     const c = JSON.parse(con);
     console.log(c);
@@ -66,14 +57,20 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
     dateTime: string
   ) => {
     // Filter the list based on the provided criteria
-    const newList: EventClass[] = allCreatedEvents.filter((event) => {
+    const newList: EventClass[] = allSignedEvents.filter((event) => {
       return (
         (eventId !== "" ? event.eventId.includes(eventId) : true) &&
         (studentId !== "" ? event.stuId.includes(studentId) : true) &&
         (lecturerId !== "" ? event.teacherId.includes(lecturerId) : true) &&
-        (dateTime !== "" ? event.deadline.includes(dateTime) : true)
+        (dateTime !== "" && event.timestamp
+          ? DTFormator.formatTimestamp(event.timestamp)
+              .toString()
+              .includes(dateTime)
+          : true)
       );
     });
+
+    console.log("New:" + newList);
 
     setFiltedEvents(newList); // Return the filtered list
   };
@@ -87,18 +84,14 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
         allEventsSet.add(ev);
       });
 
-      const allCreated: EventClass[] = [];
+      const allSigned: EventClass[] = [];
       allEventsSet.forEach((ev: EventClass) => {
-        if (ev.eventId.includes("-create")) {
-          allCreated.push(ev);
+        if (!ev.eventId.includes("-create")) {
+          allSigned.push(ev);
         }
       });
-      setAllCreatedEvents(allCreated);
-
-      const all: EventClass[] = [];
-      console.log(allCreated);
-      setAllEvents(all);
-      setFiltedEvents(allCreated);
+      setAllSignedEvents(allSigned);
+      setFiltedEvents(allSigned);
       setError(null); // Clear any previous errors
     } catch (err) {
       console.error("Error fetching attendance:", err);
@@ -122,23 +115,19 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
                 Teacher ID
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
                 Deadline
-              </th>
+              </th> */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
                 Remark
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-                Action
+                History Record
               </th>
             </tr>
           </thead>
           <tbody className="w-full bg-white divide-y divide-gray-200">
             {filtedEvents.map((ev: EventClass, index) => {
-              const isSigned = isEventSigned(ev, allCreatedEvents); // 判断是否已签到
-              const dt = new Date(ev.deadline);
-              const now = new Date();
-              const isExpired = dt.getTime() < now.getTime();
               return (
                 <tr key={index}>
                   <td className="px-6 py-4 whitespace-nowrap">{index}</td>
@@ -151,34 +140,21 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
                     {ev.teacherId}
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  {/* <td className="px-6 py-4 whitespace-nowrap">
                     {DTFormator.formatDateTime(ev.deadline).toString()}
-                  </td>
+                  </td> */}
 
                   <td className="max-x-60 min-x-40 px-6 py-4 whitespace-nowrap">
                     <p className="whitespace-normal">
                       {ev.remark || "No remark"}
                     </p>
                   </td>
-
-                  <td className="px-6 py-4">
-                    {!isSigned && !isExpired ? (
-                      <PasswordWidget
-                        buttonText="Sign"
-                        buttonClass="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
-                        onSubmit={(password) => {
-                          try {
-                            API().signAttendance(user, ev, password);
-                          } catch (error) {
-                            console.error(error);
-                          }
-                        }}
-                      />
-                    ) : (
-                      <button className="px-3 py-2 bg-gray-300 text-white rounded-lg">
-                        {isSigned ? "Signed" : "Expired"}
-                      </button>
-                    )}
+                  <td className="max-x-60 min-x-40 px-6 py-4 whitespace-nowrap">
+                    <p className="whitespace-normal">
+                      {ev.timestamp && ev.timestamp !== 0
+                        ? DTFormator.formatTimestamp(ev.timestamp).toString()
+                        : "No remark"}
+                    </p>
                   </td>
                 </tr>
               );
@@ -190,4 +166,4 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
   );
 };
 
-export default StudentEventList;
+export default StudentEventHistoryList;
