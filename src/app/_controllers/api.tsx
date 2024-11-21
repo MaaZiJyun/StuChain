@@ -1,8 +1,9 @@
 import { EventClass } from "../_modules/EventClass";
 import { UserClass } from "../_modules/UserClass";
 const API = () => {
-  const ROOT = "http://localhost:3001";
+  // const ROOT = "http://localhost:3001";
   // const ROOT = "http://172.20.10.2:3001";
+  const ROOT = "https://192.168.128.106:3001";
   const BLOCKCHAIN_BLOCKS = "/blockchain/blocks";
   const BLOCKCHAIN_TRANSACTIONS = "/blockchain/transactions";
   const OPERATOR = "/operator";
@@ -199,7 +200,7 @@ const API = () => {
     const all: EventClass[] = [];
     try {
       // Fetch blockchain data
-      const response = await fetch("http://localhost:3001/blockchain/blocks", {
+      const response = await fetch(`${ROOT}/blockchain/blocks`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -261,6 +262,16 @@ const API = () => {
     return all;
   };
 
+  const fetchBlockchainInfo = async () => {
+    try {
+      const response = await fetch(`${ROOT}/blockchain/blocks`);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching blockchain info:", error);
+    }
+  };
+
   // Return an object exposing the API functions
   return {
     // getAllWallets,
@@ -271,6 +282,7 @@ const API = () => {
     fetchWalletByID,
     createAnAddress,
     signAttendance,
+    fetchBlockchainInfo
   };
 };
 

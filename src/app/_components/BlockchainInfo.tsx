@@ -32,8 +32,7 @@ const BlockchainInfo = () => {
 
   const fetchBlockchainInfo = async () => {
     try {
-      const response = await fetch("http://localhost:3001/blockchain/blocks");
-      const data = await response.json();
+      const data = await API().fetchBlockchainInfo();
       setBlocks(data);
       setIsLoading(false);
     } catch (error) {
@@ -43,12 +42,7 @@ const BlockchainInfo = () => {
   };
 
   if (isLoading) {
-  } else
-    return (
-      <div>
-        {blocks.length > 0 && <BlockList blocks={blocks} />}
-      </div>
-    );
+  } else return <div>{blocks.length > 0 && <BlockList blocks={blocks} />}</div>;
 };
 
 export default BlockchainInfo;
