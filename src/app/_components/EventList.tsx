@@ -105,7 +105,7 @@ const EventList: React.FC<EventListProps> = ({ userInfo }) => {
       <div className="bg-white shadow-md rounded-lg p-6 text-black">
         {user && <EventForm userInfo={user} />}
         <div className="flex justify-center items-center ">
-          <div className="overflow-x-auto mt-4">
+          <div className="w-full overflow-x-auto mt-4">
             {error && <p className="text-red-500">Error: {error}</p>}
 
             <table className="w-full">
