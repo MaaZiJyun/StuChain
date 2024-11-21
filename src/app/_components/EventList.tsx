@@ -18,7 +18,6 @@ const EventList: React.FC<EventListProps> = ({ userInfo }) => {
   const unSignedEvents: Set<EventClass> = new Set();
 
   // Use the corrected useState hook
-  const [attendanceList, setAttendanceList] = useState<EventClass[]>([]);
   const [allEvents, setAllEvents] = useState<EventClass[]>([]);
 
   const [error, setError] = useState(null);

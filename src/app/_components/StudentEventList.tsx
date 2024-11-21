@@ -8,6 +8,7 @@ interface StudentEventListProps {
 }
 
 import { useEffect, useState } from "react";
+import SearchBar from "./SearchBar";
 
 const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
   const [user, setUser] = useState<UserClass>(userInfo);
@@ -18,10 +19,13 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
 
   const signedEvents: Set<EventClass> = new Set();
   const unSignedEvents: Set<EventClass> = new Set();
-
-  // Use the corrected useState hook
-  const [attendanceList, setAttendanceList] = useState<EventClass[]>([]);
+  const [filtedEvents, setFiltedEvents] = useState<EventClass[]>([]);
   const [allEvents, setAllEvents] = useState<EventClass[]>([]);
+
+  const [eventId, setEventId] = useState<string>("");
+  const [studentId, setStudentId] = useState<string>("");
+  const [lecturerId, setLecturerId] = useState<string>("");
+  const [dateTime, setDateTime] = useState<string>("");
 
   const [error, setError] = useState(null);
 
@@ -29,6 +33,38 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
     fetchTransactionList();
     setIsStudent(user.userID.startsWith("S"));
   }, []);
+
+  useEffect(() => {
+    filter(eventId, studentId, lecturerId, dateTime);
+  }, [eventId, studentId, lecturerId, dateTime]);
+
+  const handleCon = (con: string) => {
+    const c = JSON.parse(con);
+    console.log(c);
+    setEventId(c.eventId);
+    setStudentId(c.studentId);
+    setLecturerId(c.lecturerId);
+    setDateTime(c.dateTime);
+  };
+
+  const filter = (
+    eventId: string,
+    studentId: string,
+    lecturerId: string,
+    dateTime: string
+  ) => {
+    // Filter the list based on the provided criteria
+    const newList: EventClass[] = allEvents.filter((event) => {
+      return (
+        (eventId !== "" ? event.eventId.includes(eventId) : true) &&
+        (studentId !== "" ? event.stuId.includes(studentId) : true) &&
+        (lecturerId !== "" ? event.teacherId.includes(lecturerId) : true) &&
+        (dateTime !== "" ? event.deadline.includes(dateTime) : true)
+      );
+    });
+
+    setFiltedEvents(newList); // Return the filtered list
+  };
 
   // Fetch attendance list
   const fetchTransactionList = async () => {
@@ -101,6 +137,7 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
         all.push(ev);
       });
       setAllEvents(all);
+      setFiltedEvents(all);
       setError(null); // Clear any previous errors
     } catch (err) {
       console.error("Error fetching attendance:", err);
@@ -167,10 +204,50 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
 
   return (
     <div className="mb-6">
+      <SearchBar userInfo={user} onSubmit={handleCon} />
       <div className="flex justify-center items-center bg-white p-4 rounded-lg shadow-md">
-        <div className="container mx-auto mt-4">
-          {error && <p className="text-red-500">Error: {error}</p>}
+        {error && <p className="text-red-500">Error: {error}</p>}
+        <table className="w-full">
+          <thead className="w-full bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Index
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                Event Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                Teacher ID
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                Deadline
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                Remark
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody className="w-full bg-white divide-y divide-gray-200">
+            {filtedEvents.map((ev: EventClass, index) => {
+              const isSigned = signedEvents.has(ev); // 判断是否已签到
+              return (
+                <tr key={index}>
+                  <td className="px-6 py-4 whitespace-nowrap">{index}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {ev.eventId.replace("-create", "")}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {ev.teacherId}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">{ev.deadline}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {ev.remark || "No remark"}
+                  </td>
 
+<<<<<<< Updated upstream
           <table className="w-full">
             <thead className="w-full bg-gray-50">
               <tr>
@@ -230,6 +307,25 @@ const StudentEventList: React.FC<StudentEventListProps> = ({ userInfo }) => {
             </tbody>
           </table>
         </div>
+=======
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {!isSigned && (
+                      <button
+                        className="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+                        onClick={() => {
+                          signAttendance(ev);
+                        }}
+                      >
+                        Sign
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+>>>>>>> Stashed changes
       </div>
     </div>
   );

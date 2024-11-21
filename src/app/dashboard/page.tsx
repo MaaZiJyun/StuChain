@@ -75,7 +75,6 @@ const page = () => {
       <div className="h-screen lg:flex bg-blue-600">
         {user && <Navbar userInfo={user} />}
         <main className="overflow-y-auto w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
-          {user && <SearchBar userInfo={user} />}
           {user && <Profile userInfo={user} />}
           <div className="bg-white shadow-md rounded-lg p-6 text-black">
             {isStudent ? (
