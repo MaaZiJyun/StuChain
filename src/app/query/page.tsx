@@ -211,30 +211,43 @@ const QueryPage = () => {
               <thead>
                 <tr className="bg-gray-50">
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Index
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Event ID
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Student ID
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Timestamp
+                    Date
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredRecords.map((record, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {record.eventId}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {record.stuId}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {DTFormator.formatTimestamp(record.timestamp).toString()}
-                    </td>
-                  </tr>
-                ))}
+                {filteredRecords.map((record, index) => {
+                  let formattedTime;
+                  try {
+                    formattedTime = DTFormator.formatTimestamp(record.timestamp).toString();
+                  } catch (err) {
+                    formattedTime = new Date(record.timestamp * 1000).toLocaleString();
+                  }
+
+                  return (
+                    <tr key={index}>
+                      <td className="px-6 py-4 whitespace-nowrap">{index}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {record.eventId}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {record.stuId}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {formattedTime}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

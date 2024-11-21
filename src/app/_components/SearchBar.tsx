@@ -5,7 +5,6 @@ import AttendanceWidget from "./AttendanceWidget";
 import {
   MagnifyingGlassIcon,
   ArrowUturnLeftIcon,
-  FlagIcon,
 } from "@heroicons/react/24/outline";
 
 interface SearchBarProps {
@@ -18,15 +17,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ userInfo, onSubmit }) => {
   const isStudent = user.userID.startsWith("S");
 
   const [eventId, setEventId] = useState<string>("");
-  const [studentId, setStudentId] = useState<string>("");
   const [lecturerId, setLecturerId] = useState<string>("");
   const [dateTime, setDateTime] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
     const con = {
       eventId: eventId,
-      studentId: studentId,
       lecturerId: lecturerId,
       dateTime: dateTime,
     };
@@ -34,29 +31,21 @@ const SearchBar: React.FC<SearchBarProps> = ({ userInfo, onSubmit }) => {
   };
 
   const handleSubmitEmpty = (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
     setEventId("");
-    setStudentId("");
     setLecturerId("");
     setDateTime("");
     const con = {
       eventId: "",
-      studentId: "",
       lecturerId: "",
       dateTime: "",
     };
     onSubmit(JSON.stringify(con));
   };
 
-  // Handlers for input changes
   const handleEventIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const enteredEventId = e.target.value;
     setEventId(enteredEventId);
-  };
-
-  const handleStudentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const enteredStudentId = e.target.value;
-    setStudentId(enteredStudentId);
   };
 
   const handleLecturerIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,20 +70,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ userInfo, onSubmit }) => {
           className="w-full p-1 border-b-2 text-black border-black mx-2 focus:outline-none focus:border-blue-500"
         />
 
-        {isStudent ? (
+        {isStudent && (
           <input
             type="text"
             placeholder="Lecturer ID"
             value={lecturerId}
             onChange={handleLecturerIdChange}
-            className="w-full p-1 border-b-2 text-black border-black mx-2 focus:outline-none focus:border-blue-500"
-          />
-        ) : (
-          <input
-            type="text"
-            placeholder="Student ID"
-            value={studentId}
-            onChange={handleStudentIdChange}
             className="w-full p-1 border-b-2 text-black border-black mx-2 focus:outline-none focus:border-blue-500"
           />
         )}
@@ -121,20 +102,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ userInfo, onSubmit }) => {
           >
             <ArrowUturnLeftIcon className="h-6 w-6" />
           </button>
-          {/* <button
-            type="button"
-            className="bg-red-500 text-white px-1 py-1 rounded-md hover:bg-red-600"
-          >
-            <FlagIcon className="h-6 w-6" />
-          </button> */}
         </div>
-
-        {/* <div className="text-black rounded-lg">
-          <select>
-            <option>by User ID</option>
-            <option>by Address</option>
-          </select>
-        </div> */}
       </div>
     </div>
   );
