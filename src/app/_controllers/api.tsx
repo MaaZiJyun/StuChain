@@ -1,10 +1,8 @@
 import { EventClass } from "../_modules/EventClass";
 import { UserClass } from "../_modules/UserClass";
 const API = () => {
-  // const ROOT = "http://localhost:3001";
-  // const ROOT = "http://172.20.10.2:3001";
-  // const ROOT = "https://192.168.128.106:3001";
-  const ROOT = "https://192.168.33.253:3001";
+  const ROOT = "https://localhost:3001";
+  // const ROOT = "https://192.168.33.253:3001";
   const BLOCKCHAIN_BLOCKS = "/blockchain/blocks";
   const BLOCKCHAIN_TRANSACTIONS = "/blockchain/transactions";
   const OPERATOR = "/operator";

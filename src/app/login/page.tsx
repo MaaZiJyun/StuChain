@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Spinner from "../_components/Spinner";
 import { UserClass } from "../_modules/UserClass";
 import withOutAuth from "../_components/WithOutAuth";
+import DTFormator from "../_controllers/DateTimeFormator";
 
 const page = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const page = () => {
   const [password, setPassword] = useState("");
   const [errorMessageOnUserID, setErrorMessageOnUserID] = useState("");
   const [errorMessageOnPwd, setErrorMessageOnPwd] = useState("");
+  const [successMessage, setSuccessMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const buttonCheck = () => {
@@ -40,7 +42,8 @@ const page = () => {
         if (result) {
           // 登录成功后，重定向到主页
           setLoading(false);
-          router.push("/dashboard");
+          // router.push("/dashboard");
+          setSuccessMessage(`Welcome ${user.userID}`);
         } else {
           setErrorMessageOnUserID("Storing error");
         }
@@ -91,8 +94,31 @@ const page = () => {
     setRole(newRole);
   };
 
+  const goToDashBoard = () => {
+    setSuccessMessage("");
+    router.push("/dashboard");
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      {successMessage && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+            <div className="text-center">
+              <p className="text-lg text-blue-500 mb-4">{successMessage}</p>
+              <p className="text-sm text-gray-600 mb-6">
+                {`Log in ${DTFormator.formatTimestamp(Date.now())}`}
+              </p>
+              <button
+                onClick={goToDashBoard}
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-base w-full"
+              >
+                Go to Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <form className="w-[90%] lg:w-1/3 p-12 bg-white rounded-xl shadow-md">
         <h1 className="text-3xl text-black mb-2 font-bold text-center">
           Sign in
