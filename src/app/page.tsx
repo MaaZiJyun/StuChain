@@ -68,23 +68,23 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       <header className="bg-blue-600 p-4 text-white">
         <nav className="text-center">
-          <a href="#" className="mx-8 hover:underline">
+          <a href="#" className="mx-4 lg:mx-8 hover:underline">
             Home
           </a>
-          <a href="#features" className="mx-8 hover:underline">
+          <a href="#features" className="mx-4 lg:mx-8 hover:underline">
             Features
           </a>
-          <a href="#" className="mx-8 hover:underline">
+          <a href="#" className="mx-4 lg:mx-8 hover:underline">
             Pricing
           </a>
-          <a href="#team" className="mx-8 hover:underline">
+          <a href="#team" className="mx-4 lg:mx-8 hover:underline">
             Team
           </a>
         </nav>
       </header>
 
-      <main className="flex flex-col items-center justify-center bg-white min-h-screen py-12 px-12">
-        <section className="text-center py-20 w-1/2">
+      <main className="flex flex-col items-center justify-center bg-white min-h-screen py-12 px-6 lg:px-12">
+        <section className="text-center py-20 lg:w-1/2">
           <h2 className="text-4xl font-semibold mb-8">
             Blockchain Student Attendance System
           </h2>
@@ -105,7 +105,7 @@ export default function Home() {
 
         <section id="features" className="container mx-auto py-20">
           <h3 className="text-3xl font-semibold text-center mb-6">Features</h3>
-          <div className="flex justify-around">
+          <div className="lg:flex justify-around">
             {features.map((feature, index) => (
               <div className="w-full sm:w-1/3 p-4" key={index}>
                 <div className="bg-white shadow-md rounded-lg p-6 text-center">

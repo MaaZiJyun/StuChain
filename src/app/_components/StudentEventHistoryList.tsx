@@ -26,7 +26,7 @@ const StudentEventHistoryList: React.FC<StudentEventHistoryListProps> = ({
   const [allOwnSignedEvents, setAllSignedEvents] = useState<EventClass[]>([]);
 
   const [eventId, setEventId] = useState<string>("");
-  const [studentId, setStudentId] = useState<string>("");
+  const [teacherId, setStudentId] = useState<string>("");
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
 
@@ -38,17 +38,17 @@ const StudentEventHistoryList: React.FC<StudentEventHistoryListProps> = ({
   }, []);
 
   useEffect(() => {
-    if (eventId || studentId || startDate || endDate) {
-      filter(eventId, studentId, startDate!, endDate!);
+    if (eventId || teacherId || startDate || endDate) {
+      filter(eventId, teacherId, startDate!, endDate!);
       console.log("[eventId, studentId, startDate, endDate]");
     } else {
       setFiltedEvents(allOwnSignedEvents);
     }
-  }, [eventId, studentId, startDate, endDate]);
+  }, [eventId, teacherId, startDate, endDate]);
 
   const filter = (
     eventId: string,
-    studentId: string,
+    teacherId: string,
     startDate: Date,
     endDate: Date
   ) => {
@@ -74,7 +74,7 @@ const StudentEventHistoryList: React.FC<StudentEventHistoryListProps> = ({
 
         return (
           (eventId !== "" ? event.eventId.includes(eventId) : true) &&
-          (studentId !== "" ? event.stuId.includes(studentId) : true) &&
+          (teacherId !== "" ? event.teacherId.includes(teacherId) : true) &&
           isAfterStart &&
           isBeforeEnd
         );
@@ -120,7 +120,7 @@ const StudentEventHistoryList: React.FC<StudentEventHistoryListProps> = ({
       case "eventId":
         setEventId(value);
         break;
-      case "studentId":
+      case "teacherId":
         setStudentId(value);
         break;
       case "startDate":
@@ -131,12 +131,6 @@ const StudentEventHistoryList: React.FC<StudentEventHistoryListProps> = ({
         break;
       default:
         break;
-    }
-  };
-
-  const fetchAndFilterRecords = () => {
-    if (eventId || studentId || startDate || endDate) {
-      filter(eventId, studentId, startDate!, endDate!);
     }
   };
 
@@ -163,10 +157,10 @@ const StudentEventHistoryList: React.FC<StudentEventHistoryListProps> = ({
           <div>
             <input
               type="text"
-              value={studentId}
-              onChange={(e) => handleFilterChange(e, "studentId")}
+              value={teacherId}
+              onChange={(e) => handleFilterChange(e, "teacherId")}
               className="w-full p-2 border rounded-md"
-              placeholder="Enter student ID"
+              placeholder="Enter teacher ID"
             />
           </div>
 
