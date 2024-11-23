@@ -178,6 +178,8 @@ const API = () => {
         }
       );
 
+      console.log(signedEvent.toJSON());
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(`Error: ${response.status} - ${errorData.message}`);
@@ -214,7 +216,7 @@ const API = () => {
 
       const blocks = await response.json();
 
-      console.log("blocks:" + JSON.stringify(blocks));
+      // console.log("blocks:" + JSON.stringify(blocks));
 
       // Filter attendance data
       const allEventsSet = new Set<EventClass>();
@@ -297,6 +299,62 @@ const API = () => {
     }
   };
 
+  const createTransaction = async (
+    user: UserClass,
+    password: string,
+    eventId: string,
+    deadline: string,
+    remark: string
+  ) => {
+    // 创建请求体
+    const fromAddress = user?.address;
+    const toAddress = user?.address;
+    const walletId = user?.walletId;
+    const teacherId = user?.userID;
+    const stuId = "";
+    const amount = 0;
+    const changeAddress = user?.address;
+
+    const now = new Date(); // 当前时间
+    now.setMinutes(now.getMinutes() + 30);
+
+    const newEvent = new EventClass(
+      fromAddress,
+      toAddress,
+      amount,
+      changeAddress,
+      stuId,
+      teacherId,
+      eventId + "-create",
+      deadline === "" ? now.toUTCString() : deadline,
+      remark
+    );
+
+    console.log("submit:" + JSON.stringify(newEvent));
+    // 发送 POST 请求
+
+    const response = await fetch(
+      `${ROOT}/operator/wallets/${walletId}/transactions`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          password, // 将密码放在请求头中
+        },
+        body: JSON.stringify(newEvent),
+      }
+    );
+
+    // 检查响应
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Error: ${response.status} - ${errorData.message}`);
+    }
+
+    return response.json(); // 返回响应数据
+  };
+
   // Return an object exposing the API functions
   return {
     // getAllWallets,
@@ -309,6 +367,7 @@ const API = () => {
     signAttendance,
     fetchBlockchainInfo,
     handleMining,
+    createTransaction,
   };
 };
 

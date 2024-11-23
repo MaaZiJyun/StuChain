@@ -3,6 +3,7 @@ import { UserClass } from "../_modules/UserClass";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { EventClass } from "../_modules/EventClass";
 import PasswordWidget from "./PasswordWidget";
+import API from "../_controllers/api";
 
 interface ventFormProps {
   userInfo: UserClass;
@@ -43,7 +44,8 @@ const EventForm: React.FC<ventFormProps> = ({ userInfo }) => {
 
   const createEvent = async () => {
     if (user) {
-      const data = await createTransaction(
+      const data = await API().createTransaction(
+        user,
         assignedPassword,
         eventName,
         deadline,
@@ -59,61 +61,6 @@ const EventForm: React.FC<ventFormProps> = ({ userInfo }) => {
     }
   };
 
-  const createTransaction = async (
-    password: string,
-    eventId: string,
-    deadline: string,
-    remark: string
-  ) => {
-    // 创建请求体
-    const fromAddress = user?.address;
-    const toAddress = user?.address;
-    const walletId = user?.walletId;
-    const teacherId = user?.userID;
-    const stuId = "";
-    const amount = 0;
-    const changeAddress = user?.address;
-
-    const now = new Date(); // 当前时间
-    now.setMinutes(now.getMinutes() + 30);
-
-    const newEvent = new EventClass(
-      fromAddress,
-      toAddress,
-      amount,
-      changeAddress,
-      stuId,
-      teacherId,
-      eventId + "-create",
-      deadline === "" ? now.toUTCString() : deadline,
-      remark
-    );
-
-    console.log("submit:" + JSON.stringify(newEvent));
-    // 发送 POST 请求
-
-    const response = await fetch(
-      `http://localhost:3001/operator/wallets/${walletId}/transactions`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          password, // 将密码放在请求头中
-        },
-        body: JSON.stringify(newEvent),
-      }
-    );
-
-    // 检查响应
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`Error: ${response.status} - ${errorData.message}`);
-    }
-
-    return response.json(); // 返回响应数据
-  };
-
   return (
     <>
       {successMessage ? (
@@ -121,7 +68,9 @@ const EventForm: React.FC<ventFormProps> = ({ userInfo }) => {
           <div className="bg-white p-8 rounded-lg shadow-lg w-96">
             <div className="text-center">
               <p className="text-lg text-blue-500 mb-4">{successMessage}</p>
-              <p className="text-sm text-gray-600 mb-6">Event will be published after mining process</p>
+              <p className="text-sm text-gray-600 mb-6">
+                Event will be published after mining process
+              </p>
               <button
                 onClick={() => setSuccessMessage("")}
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-base w-full"
@@ -187,10 +136,10 @@ const EventForm: React.FC<ventFormProps> = ({ userInfo }) => {
               </div>
 
               {/* Submit Button */}
-              <div className="flex space-x-4">
+              <div className="flex">
                 <PasswordWidget
                   buttonText="Create Event"
-                  buttonClass="w-full bg-blue-500 text-white font-medium py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  buttonClass="w-full bg-blue-500 text-white font-medium py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mr-4"
                   onSubmit={handlePasswordSubmit}
                 />
                 <button
