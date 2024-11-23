@@ -3,7 +3,8 @@ import { UserClass } from "../_modules/UserClass";
 const API = () => {
   // const ROOT = "http://localhost:3001";
   // const ROOT = "http://172.20.10.2:3001";
-  const ROOT = "https://192.168.128.106:3001";
+  // const ROOT = "https://192.168.128.106:3001";
+  const ROOT = "https://192.168.33.253:3001";
   const BLOCKCHAIN_BLOCKS = "/blockchain/blocks";
   const BLOCKCHAIN_TRANSACTIONS = "/blockchain/transactions";
   const OPERATOR = "/operator";
@@ -272,6 +273,32 @@ const API = () => {
     }
   };
 
+  const handleMining = async (user: UserClass) => {
+    try {
+      const response = await fetch(`${ROOT}/miner/mine`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          rewardAddress: user.address,
+          feeAddress: user.address,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Mining failed");
+      }
+
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (err) {
+      throw new Error("block create failed");
+    }
+  };
+
   // Return an object exposing the API functions
   return {
     // getAllWallets,
@@ -282,7 +309,8 @@ const API = () => {
     fetchWalletByID,
     createAnAddress,
     signAttendance,
-    fetchBlockchainInfo
+    fetchBlockchainInfo,
+    handleMining,
   };
 };
 

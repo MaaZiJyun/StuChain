@@ -9,15 +9,22 @@ class DTFormator {
 
   static formatTimestamp(timestamp: number): DTFormator {
     try {
-      
-      if (timestamp.toString().length === 10) {
-        timestamp > 1000000000000 ? timestamp : timestamp * 1000
+      // Convert timestamp to milliseconds if in seconds
+      if (timestamp.toString().includes(".")) {
+        timestamp *= 1000; // Convert to milliseconds
       }
-      const isoString = new Date(timestamp).toISOString();
+
+      // Create a date object from the timestamp
+      const isoString = new Date(timestamp).toUTCString();
+
+      // Format the date and time
       const formattedDateTime = DTFormator.formatDateTime(isoString);
+
+      // Return a new instance of DTFormator with formatted date and time
       return new DTFormator(formattedDateTime.date, formattedDateTime.time);
     } catch (error) {
-     return  new DTFormator("", "");
+      console.error("Error formatting timestamp:", error); // Log the error for debugging
+      return new DTFormator("", "");
     }
   }
 
@@ -27,7 +34,7 @@ class DTFormator {
 
   static formatDateTime(isoString: string): DTFormator {
     const dateObject = new Date(isoString);
-    
+
     const year = dateObject.getFullYear();
     const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
     const day = dateObject.getDate().toString().padStart(2, "0");

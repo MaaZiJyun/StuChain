@@ -33,7 +33,7 @@ const page = () => {
   } else
     return (
       <div className="h-screen lg:flex bg-blue-600">
-       {user && <Navbar userInfo={user} />}
+        {user && <Navbar userInfo={user} />}
         <main className="overflow-y-auto w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
           <div className="bg-white shadow-md rounded-lg p-6 mb-6">
             <h2 className="text-3xl text-black font-bold mb-4">Blockchain</h2>
@@ -42,7 +42,7 @@ const page = () => {
               information.
             </p>
             {/* Add Mining Button component */}
-            <MiningButton />
+            {user && <MiningButton userInfo={user} />}
           </div>
 
           {/* Add BlockchainInfo component */}

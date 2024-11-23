@@ -4,6 +4,8 @@ import { useState } from "react";
 import Spinner from "./Spinner";
 import DTFormator from "../_controllers/DateTimeFormator";
 import { WrenchIcon } from "@heroicons/react/24/outline";
+import API from "../_controllers/api";
+import { UserClass } from "../_modules/UserClass";
 
 interface Block {
   index: number;
@@ -14,7 +16,12 @@ interface Block {
   nonce: number;
 }
 
-const MiningButton = () => {
+interface MiningButtonProps {
+  userInfo: UserClass,
+}
+
+const MiningButton:React.FC<MiningButtonProps> = ({userInfo}) => {
+  const [user, setUser] = useState<UserClass>(userInfo);
   const [loading, setLoading] = useState(false);
   const [newBlock, setNewBlock] = useState<Block | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -25,18 +32,7 @@ const MiningButton = () => {
     setNewBlock(null);
 
     try {
-      const response = await fetch("http://localhost:3001/miner/mine", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Mining failed");
-      }
-
-      const data = await response.json();
+      const data = await API().handleMining(user);
       setNewBlock(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to mine block");
