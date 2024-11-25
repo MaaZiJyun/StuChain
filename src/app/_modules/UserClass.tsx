@@ -61,6 +61,7 @@ export class UserClass {
         "user",
         newWallet.toJSON()
       );
+      console.log("new User information: " + newWallet.toJSON());
       if (result) {
         return newWallet;
       } else return null;

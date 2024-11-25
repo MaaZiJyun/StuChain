@@ -11,6 +11,8 @@ import QRCodeGenerator from "../_components/QRCodeGenerator";
 import DateTimeFormator from "../_controllers/DateTimeFormator";
 import EventList from "../_components/EventList";
 import StudentEventList from "../_components/StudentEventList";
+import StudentEventHistoryList from "../_components/StudentEventHistoryList";
+import ProductWidget from "../_components/ProductWidget";
 
 const page = () => {
   const [user, setUser] = useState<UserClass>();
@@ -50,12 +52,15 @@ const page = () => {
         {user && <Navbar userInfo={user} />}
         <main className="overflow-y-auto w-full lg:flex-grow p-6 bg-gray-100 lg:rounded-l-xl lg:my-3 shadow-md">
           {user && <Profile userInfo={user} />}
-          <div>
+          {/* <div>
             {isStudent ? (
-              <>{user && <StudentEventList userInfo={user} />}</>
+              <>{user && <StudentEventHistoryList userInfo={user} />}</>
             ) : (
               <>{user && <EventList userInfo={user} />}</>
             )}
+          </div> */}
+          <div className="flex justify-center items-center">
+            <ProductWidget />
           </div>
         </main>
       </div>

@@ -1,8 +1,8 @@
 import { EventClass } from "../_modules/EventClass";
 import { UserClass } from "../_modules/UserClass";
 const API = () => {
-  // const ROOT = "https://localhost:3001";
-  const ROOT = "https://192.168.33.253:3001";
+  const ROOT = "https://localhost:3001";
+  // const ROOT = "https://192.168.33.253:3001";
   const BLOCKCHAIN_BLOCKS = "/blockchain/blocks";
   const BLOCKCHAIN_TRANSACTIONS = "/blockchain/transactions";
   const OPERATOR = "/operator";
@@ -37,6 +37,32 @@ const API = () => {
       return null; // Return undefined if an error occurs
     }
   }
+
+  const getBalance = async (user: UserClass) => {
+    try {
+      // Call the external API endpoint
+      const response = await fetch(`${ROOT}/operator/${user.address}/balance`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      // Parse the response
+      if (!response.ok) {
+        throw new Error("Failed to fetch balance");
+      }
+      const data = await response.json();
+      console.log("the balance is: " + data.balance);
+
+      return data.balance;
+      // Respond with the balance
+      // res.status(200).json(data);
+    } catch (error) {
+      console.error({ error: "Failed to fetch balance" });
+      return -1;
+    }
+  };
 
   const verificationAuth = async (
     userID: string,
@@ -368,6 +394,7 @@ const API = () => {
     fetchBlockchainInfo,
     handleMining,
     createTransaction,
+    getBalance,
   };
 };
 
