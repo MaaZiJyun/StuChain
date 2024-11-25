@@ -35,11 +35,15 @@ const Profile: React.FC<ProfileProps> = ({ userInfo }) => {
 
   const getUserBalance = async () => {
     if (user.address) {
-      const bal = await API().getBalance(user);
-      console.log("running balance");
-      if (bal) {
-        setBalance(`$${bal / 1000000000}`);
-      } else {
+      try {
+        const bal = await API().getBalance(user);
+        console.log("running balance");
+        if (bal >= 0) {
+          setBalance(`$${bal / 1000000000}`);
+        } else {
+          setBalance("No Balance");
+        }
+      } catch (error) {
         setBalance("No Balance");
       }
     } else {

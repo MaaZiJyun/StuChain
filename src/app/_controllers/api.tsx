@@ -50,7 +50,7 @@ const API = () => {
 
       // Parse the response
       if (!response.ok) {
-        throw new Error("Failed to fetch balance");
+        // throw new Error("Failed to fetch balance");
       }
       const data = await response.json();
       console.log("the balance is: " + data.balance);
