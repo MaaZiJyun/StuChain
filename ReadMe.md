@@ -1,34 +1,8 @@
-
-# A Student Attendance Application Based on NaiveCoin
-
-_Group 9_
+# StuChain: A Student Attendance Application Based on NaiveCoin
 
 **MA Zhiyuan, WANG Zepeng, QIN Cailing, XU Junda, DU Jiahao**  
-**Course Number**: COMP5521  
 
 **November 30, 2024**
-
----
-
-## Table of Contents  
-
-1. [Introduction](#introduction)  
-2. [Project Background](#project-background)  
-3. [Problem Statement](#problem-statement)  
-4. [Objectives](#objectives)  
-5. [Literature Review](#literature-review)  
-    - [Naivecoin](#naivecoin)  
-    - [Blockchain for Education](#blockchain-for-education)  
-    - [Blockchain Characteristics](#blockchain-characteristics)  
-    - [Previous Research](#previous-research)  
-6. [Methodology](#methodology)  
-    - [RAD Model](#rad-model)  
-    - [System Framework](#system-framework)  
-    - [System Analysis and Design](#system-analysis-and-design)  
-7. [Development Environment](#development-environment)  
-8. [Project Work Division](#project-work-division)  
-    - [Implementation and Discussion](#implementation-and-discussion)  
-9. [References](#references)  
 
 ---
 
@@ -95,24 +69,67 @@ The architecture is composed of three layers:
 
 # Development Environment
 
-### Software Used:
-- **React Framework**: For building a scalable frontend UI.
-- **Next.js**: Simplifies client-side rendering and provides SEO optimization.
-- **VS Code**: Simplified software development and debugging.
+## Framework
+- **Next.js**: Next.js is a powerful React framework that lets developers build high-performance web apps with
+server-side rendering, static site generation, and automatic code splitting. It provides an enhanced
+development experience with features like built-in CSS support, TypeScript integration, and automatic
+optimization, making it ideal for creating scalable and SEO-friendly websites. Next.js simplifies complex
+web development tasks by offering a simple setup, efficient routing, and seamless deployment options.
+- **NaiveCoin**
+NaiveCoin is a lightweight blockchain implementation designed for educational and experimental
+purposes. It has a simple codebase and clear structure, making it suitable for secondary development. This
+project uses NaiveCoin as the backend framework, enhanced with additional functionalities to meet the
+requirements of the student attendance system.
+
+## Tools
+### Github
+GitHub is a Git-based distributed version control platform that provides powerful support for code
+management and team collaboration for project development: Each code commit, modification and update
+is recorded, making it easy to track development history and roll back versions when needed; Through the
+branching mechanism, multiple developers can develop different functional modules in parallel to avoid
+code conflicts. Developers can submit code changes via Pull Request, and other team members can review
+the code to ensure code quality and consistency. Teams can record and assign issues in the development
+process and track their progress at any time.
+### Trello
+Trello is a visual task management tool for tracking project progress and assigning tasks:
+Development teams can assign specific tasks to each member and mark their priorities and deadlines. Drag-
+and-drop cards to move between “To-Do”, “In-Progress” and “Completed” statuses to reflect task status in
+real-time. Team members can comment, upload attachments, or add notes to the task cards, ensuring that
+the communication and execution of each task are documented. Tasks in each development cycle can be
+managed through Kanban, ensuring clear and controllable goals for each iteration.
+### Visual Studio Code
+VSCode is a lightweight yet powerful code editor developed by Microsoft, widely regarded as one
+of the best tools for modern software development. Its flexibility, speed, and rich extension ecosystem make
+it an indispensable tool for developers.
 
 ---
 
-# Implementation and Discussion
+# Implementation
+## The Process of User Registration (Student and Lecturer)
+![Description of image](screenshots/002.png "Optional title")
 
-Key process highlights include:
+## The Process of User Login (Student and Lecturer)
+![Description of image](screenshots/001.png "Optional title")
 
-### Digital Signature Attendance Implementation
-Utilizing:
-- Public-private key pairs for user authentication.
-- Stable digital signatures for decentralized and tamper-proof attendance records.
+## Teacher Posting Attendance Function Implementation
+![Description of image](screenshots/003.png "Optional title")
 
-### Mining Incentives and Blockchain
-Rewards distributed via well-structured mining mechanisms ensure fair contribution incentives for system maintenance.
+## Student Attendance Function Implementation
+![Description of image](screenshots/004.png "Optional title")
+
+## Attendance Enquiry Function Implementation (Lecturer)
+![Description of image](screenshots/005.png "Optional title")
+
+## User participation in blockchain mining process implementation
+![Description of image](screenshots/006.png "Optional title")
+
+
+## Discussion
+During the development of this project, our team held multiple discussions regarding the design
+of the blockchain-based attendance system, focusing on key issues such as system feasibility, efficiency
+and user experience. Throughout these discussions, we proposed two main design hypotheses and,
+through comparison and analysis of these two approaches, ultimately determined the system's
+implementation plan.
 
 ---
 
@@ -123,7 +140,3 @@ Rewards distributed via well-structured mining mechanisms ensure fair contributi
 3. European Commission (2023). "Blockchain for Cross-Nation Credentialing."  
 4. Arnab et al., "Machine Learning and Blockchain-Based Attendance Systems," 2021.  
 5. Webisoft, "Blockchain in Education: Next Steps." 2024.  
-
----
-
-If you need further sections or edits, feel free to ask!
