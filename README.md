@@ -70,21 +70,13 @@ The architecture is composed of three layers:
 # Development Environment
 
 ## Framework
-- **Next.js**: Next.js is a powerful React framework that lets developers build high-performance web apps with
-server-side rendering, static site generation, and automatic code splitting. It provides an enhanced
-development experience with features like built-in CSS support, TypeScript integration, and automatic
-optimization, making it ideal for creating scalable and SEO-friendly websites. Next.js simplifies complex
-web development tasks by offering a simple setup, efficient routing, and seamless deployment options.
+- **Next.js**
 - **NaiveCoin**
-NaiveCoin is a lightweight blockchain implementation designed for educational and experimental
-purposes. It has a simple codebase and clear structure, making it suitable for secondary development. This
-project uses NaiveCoin as the backend framework, enhanced with additional functionalities to meet the
-requirements of the student attendance system.
 
 ## Tools
-- Github
-- Trello
-- Visual Studio Code
+- **Github**
+- **Trello**
+- **Visual Studio Code**
 
 ---
 
