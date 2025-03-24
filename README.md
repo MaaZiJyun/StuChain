@@ -82,25 +82,9 @@ project uses NaiveCoin as the backend framework, enhanced with additional functi
 requirements of the student attendance system.
 
 ## Tools
-### Github
-GitHub is a Git-based distributed version control platform that provides powerful support for code
-management and team collaboration for project development: Each code commit, modification and update
-is recorded, making it easy to track development history and roll back versions when needed; Through the
-branching mechanism, multiple developers can develop different functional modules in parallel to avoid
-code conflicts. Developers can submit code changes via Pull Request, and other team members can review
-the code to ensure code quality and consistency. Teams can record and assign issues in the development
-process and track their progress at any time.
-### Trello
-Trello is a visual task management tool for tracking project progress and assigning tasks:
-Development teams can assign specific tasks to each member and mark their priorities and deadlines. Drag-
-and-drop cards to move between “To-Do”, “In-Progress” and “Completed” statuses to reflect task status in
-real-time. Team members can comment, upload attachments, or add notes to the task cards, ensuring that
-the communication and execution of each task are documented. Tasks in each development cycle can be
-managed through Kanban, ensuring clear and controllable goals for each iteration.
-### Visual Studio Code
-VSCode is a lightweight yet powerful code editor developed by Microsoft, widely regarded as one
-of the best tools for modern software development. Its flexibility, speed, and rich extension ecosystem make
-it an indispensable tool for developers.
+- Github
+- Trello
+- Visual Studio Code
 
 ---
 
